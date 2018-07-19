@@ -69,7 +69,6 @@ class App extends Component {
     const store=this.props.store
     return (
       <div className="App">
-       
         <Router>
           <div>
           <Switch>
@@ -79,12 +78,13 @@ class App extends Component {
                 <Route path="/login" component={Login}></Route>
                 <Route path="/my" component={My}   data={{'harry':'handsome'}}></Route>
                 {/* <PropectedRouter path="/my" component={My}></PropectedRouter> */}
-                 <Route  component={Nofound}></Route>
+                 <Route  component={Nofound}></Route>   
             </Switch>
             {/* <></> */}
+            <TabBarExample></TabBarExample>
           </div>
         </Router>
-        <TabBarExample></TabBarExample>
+       
       </div>
     );
   }
