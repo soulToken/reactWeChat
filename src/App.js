@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 // import logo from './logo.svg';
 import * as apis from './api/api';
-import { HashRouter as Router, Route, Link,Switch } from "react-router-dom";
+import { HashRouter as Router, Route, Link, Switch } from "react-router-dom";
 // import PropectedRouter from './router/PropectedRouter';
-import {addGun} from './redux'
+import { addGun } from './redux'
 import Login from './components/login'
 import Nofound from './components/errorPages/nofound'
 import TabBarExample from './components/tooBar/tooBar'
@@ -11,12 +11,11 @@ import Home from './components/home/index'
 import About from './components/myAppointment/index'
 import My from './components/my/index'
 import './App.css';
-// const Home = (props) => (
-//   <div>
-//     <h2>Home</h2>
-    
-//   </div>
-// );
+const Detail = (props) => (
+  <div>
+    <h2>Detail</h2>
+  </div>
+);
 // const Topics = ({ match }) => (
 //   <div>
 //     <h2>Topics</h2>
@@ -66,23 +65,24 @@ class App extends Component {
     });
   }
   render() {
-    const store=this.props.store
+    const store = this.props.store
     return (
       <div className="App">
         <Router>
-          <div>
+          {/* <div> */}
           <Switch>
-                <Route exact path="/" store={store} component={Home}/>
-                <Route path="/appointment" component={About} />
-                {/* <Route path="/topics" component={Topics} /> */}
-                <Route path="/login" component={Login}></Route>
-                <Route path="/my" component={My}   data={{'harry':'handsome'}}></Route>
-                {/* <PropectedRouter path="/my" component={My}></PropectedRouter> */}
-                 <Route  component={Nofound}></Route>   
-            </Switch>
-            {/* <></> */}
-          
-          </div>
+            <Route exact path="/" store={store} component={Home} />
+            <Route path="/appointment" component={About} />
+            {/* <Route path="/topics" component={Topics} /> */}
+            <Route path="/login" component={Login}></Route>
+            <Route path="/my" component={My} ></Route>
+            <Route path="/detail" component={Detail} ></Route>
+            {/* <PropectedRouter path="/my" component={My}></PropectedRouter> */}
+            <Route component={Nofound}></Route>
+          </Switch>
+          {/* <></> */}
+
+          {/* </div> */}
         </Router>
       </div>
     );
