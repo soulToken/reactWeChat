@@ -2,6 +2,7 @@
 import React, { Component } from 'react';
 import { Carousel, WingBlank } from 'antd-mobile';
 import { Grid } from 'antd-mobile';
+import TabBarExample from '../tooBar/tooBar'
 import './index.css'
 
 const data = Array.from(new Array(8)).map((_val, i) => ({
@@ -62,6 +63,7 @@ class Lunbo  extends React.Component {
         </Carousel>
       </WingBlank>
       <GridExample></GridExample>
+      <TabBarExample></TabBarExample>
         </div>
       
     );

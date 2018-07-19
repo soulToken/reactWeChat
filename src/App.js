@@ -81,10 +81,9 @@ class App extends Component {
                  <Route  component={Nofound}></Route>   
             </Switch>
             {/* <></> */}
-            <TabBarExample></TabBarExample>
+          
           </div>
         </Router>
-       
       </div>
     );
   }

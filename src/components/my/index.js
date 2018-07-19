@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { List } from 'antd-mobile';
 import { withRouter} from "react-router-dom";
 import { HashRouter as Router, Route, Link,Switch } from "react-router-dom";
+import TabBarExample from '../tooBar/tooBar'
 const Item = List.Item;
 const Brief = Item.Brief;
 
@@ -41,6 +42,9 @@ class ListExample extends React.Component {
                 My Cost Ratio
               </Item>
             </List>
+
+ <TabBarExample></TabBarExample>
+
     </div>);
   }
 }
@@ -54,7 +58,7 @@ class Iteme extends React.Component {
           disabled:false,
           match:this.props.match.path,
           history:this.props.history
-      };
+      }
     
   }
 render() {
@@ -67,7 +71,7 @@ render() {
           <Route path={`${this.state.match}/money`} component={Topic}/>
           {/* </Switch> */}
 
-
+         
   </div>);
 }
 }

@@ -2,6 +2,7 @@
 import React from 'react';
 import { Tabs, WhiteSpace } from 'antd-mobile';
 import { StickyContainer, Sticky } from 'react-sticky';
+import TabBarExample from '../tooBar/tooBar'
 import './index.css'
 
 function renderTabBar(props) {
@@ -44,6 +45,7 @@ const TabExample = () => (
       </Tabs>
     </StickyContainer>
     <WhiteSpace />
+    <TabBarExample></TabBarExample>
   </div>
 );
 
