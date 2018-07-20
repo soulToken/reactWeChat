@@ -4,7 +4,9 @@ import { TabBar } from 'antd-mobile';
 import * as apis from '../../api/api';
 import Login from '../login';
 import { HashRouter as Router, Route, Link, Switch, withRouter } from "react-router-dom";
-import './tooBar.css'
+import './tooBar.css';
+//引入背景图
+import homebackground from '../../static/images/2.jpg';
 const Home = (props) => (
   <div>
     <h2>Home</h2>
@@ -83,7 +85,7 @@ class TabBarExample extends React.Component {
             icon={<div style={{
               width: '22px',
               height: '22px',
-              background: 'url(https://zos.alipayobjects.com/rmsportal/sifuoDUQdAFKAVcFGROC.svg) center center /  21px 21px no-repeat'
+              background: 'url('+homebackground+') center center /  21px 21px no-repeat'
             }}
             />
             }

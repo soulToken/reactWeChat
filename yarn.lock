@@ -17,6 +17,10 @@
     lodash "^4.17.5"
     to-fast-properties "^2.0.0"
 
+"@tanem/svg-injector@^1.2.1":
+  version "1.2.1"
+  resolved "https://registry.yarnpkg.com/@tanem/svg-injector/-/svg-injector-1.2.1.tgz#3120e90246d0eb3c4fc6c61586a6f028a3c658ae"
+
 abab@^1.0.3:
   version "1.0.4"
   resolved "https://registry.yarnpkg.com/abab/-/abab-1.0.4.tgz#5faad9c2c07f60dd76770f71cf025b62a63cfd4e"
@@ -5885,6 +5889,12 @@ react-sticky@^6.0.3:
   dependencies:
     prop-types "^15.5.8"
     raf "^3.3.0"
+
+react-svg@^4.1.8:
+  version "4.1.8"
+  resolved "https://registry.yarnpkg.com/react-svg/-/react-svg-4.1.8.tgz#7b870c9587661ec17b6ef8c1a324540123133f77"
+  dependencies:
+    "@tanem/svg-injector" "^1.2.1"
 
 react-tween-state@^0.1.5:
   version "0.1.5"
