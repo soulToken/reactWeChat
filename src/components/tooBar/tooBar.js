@@ -6,7 +6,12 @@ import Login from '../login';
 import { HashRouter as Router, Route, Link, Switch, withRouter } from "react-router-dom";
 import './tooBar.css';
 //引入背景图
-import homebackground from '../../static/images/2.jpg';
+import home1 from '../../static/svg/homepage_home_1.svg';
+import home1Select from '../../static/svg/homepage_home.svg';
+import home2 from '../../static/svg/homepage_preconditioning_1.svg';
+import home2Select from '../../static/svg/homepage_preconditioning.svg';
+import home3 from '../../static/svg/homepage_personal_1.svg'
+import home3Select from '../../static/svg/homepage_personal.svg'
 const Home = (props) => (
   <div>
     <h2>Home</h2>
@@ -70,10 +75,10 @@ class TabBarExample extends React.Component {
   }
   render() {
     return (
-      <div style={{ position: 'fixed', height: '100%', width: '100%', top: 0, zIndex: '3' }}>
+      <div style={{ position: 'fixed', height: '100%', width: '100%', top: 0, zIndex: '3' ,background:'#fff'}}>
         <TabBar
-          unselectedTintColor="#949494"
-          tintColor="#33A3F4"
+          unselectedTintColor="#979797"
+          tintColor="#0381FF"
           barTintColor="white"
           tabBarPosition="bottom"
           // noRenderContent="true"
@@ -85,14 +90,14 @@ class TabBarExample extends React.Component {
             icon={<div style={{
               width: '22px',
               height: '22px',
-              background: 'url('+homebackground+') center center /  21px 21px no-repeat'
+              background: 'url('+home1+') center center /  21px 21px no-repeat'
             }}
             />
             }
             selectedIcon={<div style={{
               width: '22px',
               height: '22px',
-              background: 'url(https://zos.alipayobjects.com/rmsportal/iSrlOTqrKddqbOmlvUfq.svg) center center /  21px 21px no-repeat'
+              background: 'url('+home1Select+') center center /  21px 21px no-repeat'
             }}
             />
             }
@@ -110,7 +115,7 @@ class TabBarExample extends React.Component {
               <div style={{
                 width: '22px',
                 height: '22px',
-                background: 'url(https://zos.alipayobjects.com/rmsportal/psUFoAMjkCcjqtUCNPxB.svg) center center /  21px 21px no-repeat'
+                background: 'url('+home2+') center center /  21px 21px no-repeat'
               }}
               />
             }
@@ -118,7 +123,7 @@ class TabBarExample extends React.Component {
               <div style={{
                 width: '22px',
                 height: '22px',
-                background: 'url(https://zos.alipayobjects.com/rmsportal/IIRLrXXrFAhXVdhMWgUI.svg) center center /  21px 21px no-repeat'
+                background: 'url('+home2Select+') center center /  21px 21px no-repeat'
               }}
               />
             }
@@ -133,8 +138,8 @@ class TabBarExample extends React.Component {
             {/* {this.renderContent('Friend')} */}
           </TabBar.Item>
           <TabBar.Item
-            icon={{ uri: 'https://zos.alipayobjects.com/rmsportal/asJMfBrNqpMMlVpeInPQ.svg' }}
-            selectedIcon={{ uri: 'https://zos.alipayobjects.com/rmsportal/gjpzzcrPMkhfEqgbYvmN.svg' }}
+            icon={{ uri: home3}}
+            selectedIcon={{ uri: home3Select }}
             title="我的"
             key="my"
             selected={this.state.history.location.pathname === '/my'}

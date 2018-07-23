@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="34px" height="34px" viewBox="0 0 34 34" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 50.2 (55047) - http://www.bohemiancoding.com/sketch -->
+    <title>homepage_location_slice</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Artboard" transform="translate(-214.000000, -74.000000)">
+            <g id="homepage_location" transform="translate(214.000000, 74.000000)">
+                <rect id="Rectangle-4-Copy" x="0" y="0" width="34" height="34"></rect>
+                <path d="M16.9645142,10.8161256 C15.0152265,10.8161256 13.4345561,12.3967641 13.4345561,14.3460198 C13.4345561,16.2953715 15.0151945,17.8760419 16.9645142,17.8760419 C18.9138339,17.8760419 20.4945044,16.2953715 20.4945044,14.3460198 C20.4945364,12.3967641 18.9138339,10.8161256 16.9645142,10.8161256 Z M17,3 C9.26799717,3 3,9.26799717 3,17 C3,24.7320028 9.26799717,31 17,31 C24.7320028,31 31,24.7319708 31,17 C31,9.26802919 24.7320028,3 17,3 Z M16.9645142,25.9778779 C16.9645142,25.9778779 10.161798,20.7018835 10.161798,14.1036988 C10.161798,10.5694209 13.2066981,7.95819003 16.9645142,7.95819003 C20.7222983,7.95819003 23.7672624,10.5694209 23.7672624,14.1036988 C23.7672624,20.7018835 16.9645142,25.9778779 16.9645142,25.9778779 Z" id="Shape" fill="#6FCD16" fill-rule="nonzero"></path>
+            </g>
+        </g>
+    </g>
+</svg>

@@ -2,23 +2,107 @@
 import React, { Component } from 'react';
 import { Carousel, WingBlank } from 'antd-mobile';
 import { Grid } from 'antd-mobile';
-import TabBarExample from '../tooBar/tooBar'
+import TabBarExample from '../tooBar/tooBar';
 import { Route } from "react-router-dom";
-import './index.css'
+import ReactDOM from 'react-dom';
+import './index.css';
+import banner from '../../static/images/homepage_banner@3x.png';
+import { Flex, WhiteSpace } from 'antd-mobile';
+import ReactSVG from 'react-svg'
+import clinic from '../../static/svg/homepage_clinic.svg'
+import location from '../../static/svg/homepage_location.svg'
+import doctor from '../../static/svg/hompage_doctor.svg'
+import activity from '../../static/svg/homepage_activity.svg'
+import wifi from '../../static/svg/homepage_wifi.svg'
+import mall from '../../static/svg/homepage_mall.svg'
 
-const data = Array.from(new Array(8)).map((_val, i) => ({
-  icon: 'https://gw.alipayobjects.com/zos/rmsportal/nywPmnTAvTmLusPxHPSu.png',
-  text: `name${i}`,
-}));
-const data1 = Array.from(new Array(9)).map(() => ({
-  icon: 'https://gw.alipayobjects.com/zos/rmsportal/WXoqXTHrSnRcUwEaQgXJ.png',
-}));
 
-const GridExample = (props) => (
-  <div>
-    <Grid data={data} columnNum={4} onClick={_el => console.log(props.history.push('/detail'))} />
+const PlaceHolder = ({ className = '', ...restProps }) => (
+  <div  onClick={ (e) => {
+      var a={...restProps};
+      const name=e.currentTarget.getAttribute('name2');
+      //根据不同情况跳转到 不同路由
+      if(name=='预约'){
+        console.log('跳转到预约路由') 
+      }else if(name=='诊所介绍'){
+        console.log('跳转到诊所路由')
+      }else if(name=='诊所地址'){
+          console.log('跳转到诊所地址路由')
+      }else if(name=='服务项目'){
+          console.log('跳转到服务项目')
+      }else if(name=='医生团队'){
+        console.log('跳转到医生团队')
+      }else if(name=='诊所活动'){
+        console.log('跳转到诊所活动')
+      }else if(name=='免费无线'){
+        console.log('免费无线')
+      }else if(name=='诊所商城'){
+        console.log('诊所商城')
+      }    
+  } } className={`${className} placeholder`} {...restProps}  style={{display:'flex',flexDirection:'row',alignItems:'center',alignContent:'center',justifyContent:'center',color:'#808080'}}> 
+      
+      <ReactSVG
+        path={`${restProps.url}`}
+        evalScripts="always"
+        onInjected={svg => {
+          console.log('onInjected', svg)
+        }}
+        renumerateIRIElements={false}
+        svgClassName="svg-class-name"
+        svgStyle={{ width: 34 ,height:34}}
+        className="wrapper-class-name"
+        // onClick={() => {
+        //   console.log('wrapper onClick')
+        // }}
+       />
+
+       <span style={{fontSize:'18px'}}>   
+        {`${restProps.name}`}
+       
+       </span>
   </div>
 );
+
+class FlexExample  extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      disabled: false,
+    }
+  }
+  render(){
+      return (
+        <div className="flex-container" style={{marginTop:'15px'}}>
+          <Flex>
+            <Flex.Item><PlaceHolder prop={this.props.prop} className="good" name=" " name2="预约" /></Flex.Item>
+            <Flex.Item>
+                  <PlaceHolder prop={this.props.prop}  url={clinic} name="诊所介绍"  name2="诊所介绍"/>
+                  <PlaceHolder prop={this.props.prop}  url={location} name="诊所地址" name2="诊所地址" /> 
+            </Flex.Item>
+          </Flex>
+          <WhiteSpace style={{marginBottom:'5px'}}></WhiteSpace>
+          <Flex>
+            <Flex.Item><PlaceHolder prop={this.props.prop} className="good2" name=" " name2="服务项目"/></Flex.Item>
+            <Flex.Item>
+                  <PlaceHolder prop={this.props.prop} url={doctor}  name="医生团队" name2="医生团队"/>
+                  <PlaceHolder prop={this.props.prop} url={activity} name="诊所活动" name2="诊所活动" /> 
+            </Flex.Item>
+          </Flex>
+          <WhiteSpace></WhiteSpace>
+          <Flex>
+            <Flex.Item><PlaceHolder prop={this.props.prop} url={wifi} name="免费无线" name2="免费无线"/></Flex.Item>
+            <Flex.Item>
+                  <PlaceHolder prop={this.props.prop} url={mall} name="诊所商城" name2="诊所商城"/> 
+            </Flex.Item>
+          </Flex>
+        </div>
+        )
+   }
+}
+
+
+
+
 class Lunbo extends React.Component {
 
   constructor(props) {
@@ -54,13 +138,13 @@ class Lunbo extends React.Component {
             //   afterChange={index => console.log('slide to', index)}
             >
               {this.state.data.map(val => (
-                <a
+                <div
                   key={val}
-                  href="http://www.alipay.com"
+                  // href="http://www.alipay.com"
                   style={{ display: 'inline-block', width: '100%', height: this.state.imgHeight }}
                 >
                   <img
-                    src={`https://zos.alipayobjects.com/rmsportal/${val}.png`}
+                    src={banner}
                     alt=""
                     style={{ width: '100%', verticalAlign: 'top' }}
                     onLoad={() => {
@@ -69,11 +153,11 @@ class Lunbo extends React.Component {
                       this.setState({ imgHeight: 'auto' });
                     }}
                   />
-                </a>
+                </div>
               ))}
             </Carousel>
           </WingBlank>
-          <GridExample   history={this.props.history}></GridExample>
+          <FlexExample prop={this.props}></FlexExample>
 
         </div>
         <TabBarExample></TabBarExample>
