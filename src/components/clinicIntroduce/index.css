@@ -1,0 +1,92 @@
+.introduce_Box{
+    height:100%;
+    width:100%;
+    background:#fff;
+}
+.introduce_top{
+    height:221px;
+    width:100%;
+    position: relative;
+}
+.introduce_banner{
+    height:100%;
+    width:100%;
+}
+.introduce_bottom{
+    padding-left:6px;
+    padding-right:6px;
+    background: url(../../static/images/clinic_introduction_box@3x.png) no-repeat center;
+    background-size:contain;
+    height:101px;
+    position: relative;
+    top:-50px;
+}
+.introduce_con{
+    padding:0 20px;
+    height:100%;
+    color:#252525;
+}
+.introduce_con_c{
+    /* width:100%; */
+    padding-left:10px;
+    padding-right:10px;
+    height:50px;
+    line-height:50px;
+    display: flex;
+    flex-direction: row;
+
+}
+.introduce_line{
+    height:1px;
+    width:100%;
+    background: #DEDDE4;
+}
+.phoneNum{
+    margin-left:9px;
+}
+.intruduce_address{
+    flex: 1;
+    width:0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-left:9px;
+}
+.introduce_title{
+    text-align:center;
+    font-size:21px;
+    margin-top:74px;
+}
+.introduce_title2{
+    text-align:center;
+    font-size:21px;
+    margin-top:26px;
+    margin-bottom:22px;
+}
+.clinic_introduce_content{
+    padding-left:15px;
+    padding-right:15px;
+    text-indent: 24px;
+    font-size:14px;
+    font-family:PingFangSC-Regular;
+    color:rgba(0,0,0,1);
+    line-height:24px;
+    margin-top: 11px;
+    padding-bottom: 28px;
+}
+.under_line{
+    width: calc(100% - 30px);
+  margin-left:15px;
+   height:1px;
+   background:#BDBDBF;
+}
+.introduce_pic{
+    padding-left:10px;
+    padding-right:8px;
+    height:204px;
+    margin-bottom:5px;
+}
+.introduce_pic img{
+    height:100%;
+    width:100%;
+}

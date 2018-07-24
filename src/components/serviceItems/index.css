@@ -1,0 +1,33 @@
+.service_top{
+    height:228px;
+    width:100%;
+}
+.service_top img{
+    height:100%;
+    width:100%;
+    display: block;
+}
+.service_box .am-list-header{
+    padding:0;
+    padding-bottom:10px;
+}
+.twoEllipsis{
+    overflow:hidden;
+    display:-webkit-box; 
+    text-overflow:ellipsis; 
+    -webkit-line-clamp:2; 
+    width:100%;
+    -webkit-box-orient: vertical;
+    margin-top:22px;
+    font-size:16px;
+font-family:PingFangSC-Regular;
+color:rgba(0,0,0,1);
+line-height:20px;
+}
+.money{
+    font-size:20px;
+    font-family:PingFangSC-Semibold;
+    color:rgba(255,85,0,1);
+    line-height:28px;
+   
+}

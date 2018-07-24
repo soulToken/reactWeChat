@@ -91,3 +91,13 @@
 .am-whitespace.am-whitespace-lg{
     height:10px!important;
 }
+.alertContent{
+    padding-top:45px;
+    padding-bottom:34px;
+}
+.chooseTimeShow{
+    font-size:13px;
+    font-family:PingFangSC-Regular;
+    color:rgba(127,127,127,1);
+    margin-top:5px;
+}

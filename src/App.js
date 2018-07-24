@@ -12,6 +12,8 @@ import About from './components/myAppointment/index'
 import My from './components/my/index'
 import Detail from './components/detail/index';
 import OnlineBook from './components/onlineBook/index'
+import ClinicIntroduce from './components/clinicIntroduce/index'
+import ServiceItems from './components/serviceItems/index'
 import './App.css';
 // const Topics = ({ match }) => (
 //   <div>
@@ -75,6 +77,8 @@ class App extends Component {
             <Route path="/my" component={My} ></Route>
             <Route path="/detail" component={Detail} ></Route>
             <Route path="/onlineBook" component={OnlineBook} ></Route>
+            <Route path="/clinicIntroduce" component={ClinicIntroduce} ></Route>
+            <Route path="/serviceItems" component={ServiceItems} ></Route>
             {/* <PropectedRouter path="/my" component={My}></PropectedRouter> */}
             <Route component={Nofound}></Route>
           </Switch>

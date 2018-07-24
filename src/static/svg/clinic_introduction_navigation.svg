@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="49px" height="24px" viewBox="0 0 49 24" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 50.2 (55047) - http://www.bohemiancoding.com/sketch -->
+    <title>clinic_introduction_navigation_slice</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Artboard" transform="translate(-296.000000, -325.000000)">
+            <g id="clinic_introduction_navigation" transform="translate(296.000000, 325.000000)">
+                <rect id="Rectangle-Copy" fill="#FF8000" x="0" y="0" width="49" height="24" rx="12"></rect>
+                <text id="导航" font-family="PingFangSC-Medium, PingFang SC" font-size="12" font-weight="400" fill="#FFFFFF">
+                    <tspan x="13" y="17">导航</tspan>
+                </text>
+            </g>
+        </g>
+    </g>
+</svg>

@@ -1,23 +1,24 @@
 
 import React from 'react';
-import { List, Switch, Calendar ,InputItem, WhiteSpace,Button } from 'antd-mobile';
+import { List, Switch, Calendar ,InputItem, WhiteSpace,Button ,Modal,WingBlank } from 'antd-mobile';
 import enUS from 'antd-mobile/lib/calendar/locale/en_US';
 import zhCN from 'antd-mobile/lib/calendar/locale/zh_CN';
 import { createForm } from 'rc-form';
 import './index.css'
-
-
-
-
+import success from '../../static/svg/online_booking_time_success.svg'
+import fail from '../../static/svg/online_booking_time_fail.svg' 
 import { Picker} from 'antd-mobile';
 
-import arrayTreeFilter from 'array-tree-filter';
-
-import { district, provinceLite } from 'antd-mobile-demo-data';
-
-
-
-
+function closest(el, selector) {
+  const matchesSelector = el.matches || el.webkitMatchesSelector || el.mozMatchesSelector || el.msMatchesSelector;
+  while (el) {
+    if (matchesSelector.call(el, selector)) {
+      return el;
+    }
+    el = el.parentElement;
+  }
+  return null;
+}
 
 // class Test extends React.Component {
 //   state = {
@@ -79,7 +80,9 @@ class BasicInputExample extends React.Component {
         config: {},
         startTime:'',
         chooseTreatment:'还没选择呢',
-        pickerValue2:'默认医生'
+        pickerValue2:'默认医生',
+        modal1: false,
+        modal2: false,
       };
     }
   componentDidMount() {
@@ -91,6 +94,27 @@ class BasicInputExample extends React.Component {
         console.log(this.inputRef.props.value.replace(/ /g,''))
       }
     // this.inputRef.focus();
+  }
+  showModal = key => (e) => {
+    e.preventDefault(); // 修复 Android 上点击穿透
+    this.setState({
+      [key]: true,
+    });
+  }
+  onClose = key => () => {
+    this.setState({
+      [key]: false,
+    });
+  }
+  onWrapTouchStart = (e) => {
+    // fix touch to scroll background page on iOS
+    if (!/iPhone|iPod|iPad/i.test(navigator.userAgent)) {
+      return;
+    }
+    const pNode = closest(e.target, '.am-modal-content');
+    if (!pNode) {
+      e.preventDefault();
+    }
   }
   render() {
     const { getFieldProps } = this.props.form;
@@ -232,7 +256,32 @@ class BasicInputExample extends React.Component {
           </List.Item>
         </Picker>
       </List>
-      <Button type="primary" style={{width:"90%",marginLeft:'5%',marginTop:'30px'}}>提交预约</Button><WhiteSpace />
+      <Button type="primary"  onClick={this.showModal('modal2')}  style={{width:"90%",marginLeft:'5%',marginTop:'30px'}}>提交预约</Button><WhiteSpace />
+
+        
+        
+        <Modal
+          popup
+          visible={this.state.modal2}
+          maskClosable={false}
+          onClose={this.onClose('modal2')}
+          animationType="slide-up"
+        >
+          <List className="popup-list">
+           
+            <div className="alertContent">
+                <img src={success} />
+                  <div style={{color:"#000000",fontSize:'15px;'}}>您已成功预约</div>
+                  <div className="chooseTimeshow">就诊时间 2018-6-13 8:00</div>
+            </div>
+            <Button type="primary" onClick={this.onClose('modal2')}   style={{marginBottom:'30px'}}>确定</Button>
+          </List>
+        </Modal>
+
+
+
+
+
     </div>
 
             

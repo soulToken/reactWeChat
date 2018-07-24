@@ -25,11 +25,11 @@ const PlaceHolder = ({ className = '', ...restProps }) => (
       if(name=='预约'){
         a.prop.history.push('/onlineBook')
       }else if(name=='诊所介绍'){
-        console.log('跳转到诊所路由')
+        a.prop.history.push('/clinicIntroduce')
       }else if(name=='诊所地址'){
           console.log('跳转到诊所地址路由')
       }else if(name=='服务项目'){
-          console.log('跳转到服务项目')
+        a.prop.history.push('/serviceItems')
       }else if(name=='医生团队'){
         console.log('跳转到医生团队')
       }else if(name=='诊所活动'){
