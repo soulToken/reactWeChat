@@ -23,7 +23,7 @@ const PlaceHolder = ({ className = '', ...restProps }) => (
       const name=e.currentTarget.getAttribute('name2');
       //根据不同情况跳转到 不同路由
       if(name=='预约'){
-        console.log('跳转到预约路由') 
+        a.prop.history.push('/onlineBook')
       }else if(name=='诊所介绍'){
         console.log('跳转到诊所路由')
       }else if(name=='诊所地址'){

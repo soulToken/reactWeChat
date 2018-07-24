@@ -10,7 +10,8 @@ import TabBarExample from './components/tooBar/tooBar'
 import Home from './components/home/index'
 import About from './components/myAppointment/index'
 import My from './components/my/index'
-import Detail from './components/detail/index'
+import Detail from './components/detail/index';
+import OnlineBook from './components/onlineBook/index'
 import './App.css';
 // const Topics = ({ match }) => (
 //   <div>
@@ -72,7 +73,8 @@ class App extends Component {
             {/* <Route path="/topics" component={Topics} /> */}
             <Route path="/login" component={Login}></Route>
             <Route path="/my" component={My} ></Route>
-            <Route path="/detail/:id" component={Detail} ></Route>
+            <Route path="/detail" component={Detail} ></Route>
+            <Route path="/onlineBook" component={OnlineBook} ></Route>
             {/* <PropectedRouter path="/my" component={My}></PropectedRouter> */}
             <Route component={Nofound}></Route>
           </Switch>
