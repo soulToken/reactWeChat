@@ -31,7 +31,7 @@ const PlaceHolder = ({ className = '', ...restProps }) => (
       }else if(name=='服务项目'){
         a.prop.history.push('/serviceItems')
       }else if(name=='医生团队'){
-        console.log('跳转到医生团队')
+        a.prop.history.push('/doctorTeam')
       }else if(name=='诊所活动'){
         console.log('跳转到诊所活动')
       }else if(name=='免费无线'){

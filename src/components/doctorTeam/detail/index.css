@@ -1,0 +1,36 @@
+.detal_box{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color:#fff;
+}
+.detail_head_URL{
+    height:135px;
+    width:135px;
+    border-radius:50%;
+    margin-top:28px;
+}
+.detail_detail{
+    margin-top: 11px;
+    font-size: 18px;
+}
+.personIntroduce{
+  padding:27px 0px;
+  padding-left:26px;
+  padding-right:21px;
+  margin-top:10px;
+  background:rgba(255,255,255,1);
+  border-radius:14px;
+  border:1px solid rgba(222,221,228,1);
+}
+.flex_center{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+.in_de{
+    font-size:14px;
+font-family:PingFangSC-Light;
+color:rgba(0,0,0,1);
+line-height:22px;
+}

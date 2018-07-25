@@ -14,6 +14,7 @@ import Detail from './components/detail/index';
 import OnlineBook from './components/onlineBook/index'
 import ClinicIntroduce from './components/clinicIntroduce/index'
 import ServiceItems from './components/serviceItems/index'
+import DoctorTeam from './components/doctorTeam/index'
 import './App.css';
 // const Topics = ({ match }) => (
 //   <div>
@@ -79,6 +80,7 @@ class App extends Component {
             <Route path="/onlineBook" component={OnlineBook} ></Route>
             <Route path="/clinicIntroduce" component={ClinicIntroduce} ></Route>
             <Route path="/serviceItems" component={ServiceItems} ></Route>
+            <Route path="/doctorTeam" component={DoctorTeam} ></Route>
             {/* <PropectedRouter path="/my" component={My}></PropectedRouter> */}
             <Route component={Nofound}></Route>
           </Switch>
