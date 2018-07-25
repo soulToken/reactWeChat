@@ -1,0 +1,15 @@
+.my_head_box{
+    height:148px;
+    width:100%;
+    background:url(../../static/images/doctor_team_background@3x.png) no-repeat center;
+    position: relative;
+}
+.head_url_center{
+    width:138px;
+    width:138px;
+    position: absolute;
+    top:29px;
+    left:50%;
+    margin-left:-79px;
+    border-radius:50%;
+}
