@@ -1,11 +1,13 @@
 
 import React from 'react';
+import ReactDOM from 'react-dom'
 import { Tabs, WhiteSpace } from 'antd-mobile';
 import { StickyContainer, Sticky } from 'react-sticky';
 import TabBarExample from '../tooBar/tooBar'
-import { PullToRefresh, Button } from 'antd-mobile';
+import { PullToRefresh, Button ,Modal} from 'antd-mobile';
+import url from '../../static/svg/make_an_appointment_hospital.svg'
 import './index.css'
-
+const alert = Modal.alert;
 function renderTabBar(props) {
   return (<Sticky>
     {({ style }) => <div style={{ ...style, zIndex: 1 }}><Tabs.DefaultTabBar {...props} /></div>}
@@ -21,7 +23,7 @@ const tabs = [
 
 function genData() {
   const dataArr = [];
-  for (let i = 0; i < 20; i++) {
+  for (let i = 0; i < 30; i++) {
     dataArr.push(i);
   }
   return dataArr;
@@ -31,36 +33,38 @@ class Fresher extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      refreshing: false,
-      down: true,
-      height: 400,
+      refreshing: true,
+      down: false,
+      height: document.documentElement.clientHeight,
       data: [],
     };
     console.log(this.props.data)
   }
 
   componentDidMount() {
+    // console.log(ReactDOM.findDOMNode(this.ptr).offsetTop)
     // const hei = this.state.height - ReactDOM.findDOMNode(this.ptr).offsetTop;
+
+    console.log(document.getElementById('fresh').offsetTop)
+    const hei = this.state.height-100;
     setTimeout(() => this.setState({
-      height: 400,
+      height: hei,
       data: genData(),
     }), 0);
   }
 
   render() {
-    return (<div>
-      <Button
-        style={{ marginBottom: 15 }}
-        onClick={() => this.setState({ down: !this.state.down })}
-      >
-        direction: {this.state.down ? 'down' : 'up'}
-      </Button>
+    return (
+      <div>
+     
       <PullToRefresh
+        id="fresh"
         damping={60}
         ref={el => this.ptr = el}
         style={{
           height: this.state.height,
           overflow: 'auto',
+          WebkitOverflowScrolling:'touch'
         }}
         indicator={this.state.down ? {} : { deactivate: '上拉可以刷新' }}
         direction={this.state.down ? 'down' : 'up'}
@@ -84,6 +88,87 @@ class Fresher extends React.Component {
 }
 
 
+class Fresher2 extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      refreshing: true,
+      down: false,
+      height: document.documentElement.clientHeight,
+      data: [],
+    };
+    console.log(this.props.data)
+  }
+
+  componentDidMount() {
+    // console.log(ReactDOM.findDOMNode(this.ptr).offsetTop)
+    // const hei = this.state.height - ReactDOM.findDOMNode(this.ptr).offsetTop;
+
+    console.log(document.getElementById('fresh').offsetTop)
+    const hei = this.state.height-100+6;
+    setTimeout(() => this.setState({
+      height: hei,
+      data: genData(),
+    }), 0);
+  }
+  canCel=()=>{
+    alert('确定要取消预约？', '', [
+      { text: '取消', onPress: () => console.log('cancel') },
+      { text: '确定', onPress: () => console.log('ok') },
+    ])
+  }
+  render() {
+    return (
+      <div>
+     
+      <PullToRefresh
+        id="fresh"
+        damping={60}
+        ref={el => this.ptr = el}
+        style={{
+          height: this.state.height,
+          overflow: 'auto',
+          WebkitOverflowScrolling:'touch'
+        }}
+        indicator={this.state.down ? {} : { deactivate: '上拉可以刷新' }}
+        direction={this.state.down ? 'down' : 'up'}
+        refreshing={this.state.refreshing}
+        onRefresh={() => {
+         
+          this.setState({ refreshing: true });
+          setTimeout(() => {
+            this.setState({ refreshing: false });
+          }, 1000);
+        }}
+      >
+        {this.state.data.map(i => (
+          
+          <div key={i}  className="order_box">
+                <div className="order_detail">
+                    <div className="order_detail_top">
+                          <div className="order_detail_top_left">
+                          惠州市恒信口腔惠州分院
+                          </div>
+                          <div className="order_detail_top_right" onClick={this.canCel.bind(this)}>取消预约</div>   
+                    </div>
+                    <div className="order_detail_bottom" >
+                                <img src={url} className="order_detail_bottom_left" />
+                                <div className="order_detail_bottom_right">
+                                      <div>科室：口腔科门诊</div>
+                                      <div>就诊人：张晓明</div>
+                                      <div>预约时间：2018-06-13 08:00</div>
+                                </div>
+                    </div>
+                </div>
+          </div>
+        ))}
+      </PullToRefresh>
+    </div>);
+  }
+}
+
+
+
 
 
 
@@ -96,7 +181,7 @@ const TabExample = () => (
 
 
   <div>
-    <div style={{ position: 'absolute', width: '100%', bottom: '50px', top: '0', zIndex: '10', overflow: 'auto' }}>
+    <div style={{ position: 'absolute', width: '100%', bottom: '50px', top: '0', zIndex: '10', overflow: 'auto',background:'#f5f5f5' }}>
       <WhiteSpace />
       <StickyContainer>
         <Tabs tabs={tabs}
@@ -113,11 +198,11 @@ const TabExample = () => (
             }
           }
         >
-        <div style={{height:'400px'}}> 
-                <Fresher  data={{good:1}}></Fresher>
+        <div > 
+            <Fresher2  data={{good:1}}></Fresher2>
         </div>
           <div >
-          <Fresher></Fresher>
+          <Fresher2></Fresher2>
         </div>
         
         </Tabs>
@@ -126,7 +211,5 @@ const TabExample = () => (
     </div>
     <TabBarExample></TabBarExample>
   </div>
-
 );
-
 export default TabExample

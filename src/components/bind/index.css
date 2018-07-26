@@ -1,0 +1,35 @@
+.bind_box{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.bind_titleName{
+    font-size:22px;
+    font-family:PingFangSC-Semibold;
+    color:rgba(0,128,255,1);
+    line-height:30px;
+    margin-top:70px;
+    margin-bottom:32px;
+}
+.bind_box .am-list-item .am-input-label.am-input-label-5{
+    width:32px;
+}
+.bind_box .am-list-item.am-input-item{
+    border-radius:14px;
+}
+.phone_box .am-list-item .am-input-extra{
+    opacity: 0;
+}
+.code_box .am-list-item .am-input-extra{
+    font-size:14px;
+    font-family:PingFangSC-Regular;
+    color:rgba(0,128,255,1);
+    text-decoration: underline;
+    width:70px;
+    text-align: center;
+}
+.bind_btn{
+    background:rgba(0,128,255,1);
+    border-radius:14px;
+    font-size:18px;
+}

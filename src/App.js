@@ -16,6 +16,7 @@ import ClinicIntroduce from './components/clinicIntroduce/index'
 import ServiceItems from './components/serviceItems/index'
 import DoctorTeam from './components/doctorTeam/index'
 import Activity from './components/activity/index'
+import Bind from './components/bind/index'
 import './App.css';
 // const Topics = ({ match }) => (
 //   <div>
@@ -83,6 +84,7 @@ class App extends Component {
             <Route path="/serviceItems" component={ServiceItems} ></Route>
             <Route path="/doctorTeam" component={DoctorTeam} ></Route>
             <Route path="/activity" component={Activity} ></Route>
+            <Route path="/bind" component={Bind} ></Route>
             {/* <PropectedRouter path="/my" component={My}></PropectedRouter> */}
             <Route component={Nofound}></Route>
           </Switch>

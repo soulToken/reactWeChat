@@ -6,6 +6,10 @@ import TabBarExample from '../tooBar/tooBar'
 import { DatePicker, List, InputItem,Picker , Modal, Button, WingBlank, WhiteSpace, Toast } from 'antd-mobile';
 import { createForm } from 'rc-form';
 import heardUrl from '../../static/images/doctor_team_portrait@3x.png'
+import nameUrl from '../../static/svg/personal_name.svg'
+import sexUrl from '../../static/svg/personal_sex.svg'
+import ageUrl from '../../static/svg/personal_age.svg'
+import phoneUrl from '../../static/svg/personal_phone.svg'
 import './index.css'
 
 const prompt = Modal.prompt;
@@ -105,6 +109,9 @@ class ListExample extends React.Component {
     },
   ], 'default', null, ['请输入姓名'])
 }
+goBind=()=>{
+  this.props.history.push('/bind')
+}
   render() {
     return (
       <div style={{height:'100%'}}>
@@ -117,7 +124,7 @@ class ListExample extends React.Component {
 
          <List className="date-picker-list" style={{ backgroundColor: 'white',marginTop:'41px' }}>
             <Item
-              thumb="https://zos.alipayobjects.com/rmsportal/dNuvNrtqUztHCwM.png"
+              thumb={nameUrl}
               arrow="horizontal"
               extra={'郝文斌'}
               onClick={this.changeName.bind(this)}
@@ -129,7 +136,7 @@ class ListExample extends React.Component {
             
             >
               <List.Item 
-               thumb="https://zos.alipayobjects.com/rmsportal/dNuvNrtqUztHCwM.png"
+               thumb={sexUrl}
               arrow="horizontal">性别</List.Item>
             </Picker>
 
@@ -142,21 +149,13 @@ class ListExample extends React.Component {
               onChange={date => this.setState({ date })}
             >
               <List.Item 
-               thumb="https://zos.alipayobjects.com/rmsportal/dNuvNrtqUztHCwM.png"
+               thumb={ageUrl}
               arrow="horizontal">年龄</List.Item>
             </DatePicker>
-         
-
-
-
-           
             <Item
-              thumb="https://zos.alipayobjects.com/rmsportal/UmbJMbWOejVOpxe.png"
+              thumb={phoneUrl}
               extra={'18838186419'}
-              onClick={() => {
-                console.log('点击了第二个列表')
-              }}
-           
+              onClick={this.goBind.bind(this)}
             >
               手机
               </Item>
