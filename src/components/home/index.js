@@ -16,6 +16,7 @@ import activity from '../../static/svg/homepage_activity.svg'
 import wifi from '../../static/svg/homepage_wifi.svg'
 import mall from '../../static/svg/homepage_mall.svg'
 import  {GetRequest} from '../../util/index'
+import {Gmock} from '../../api/api'
 
 
 const PlaceHolder = ({ className = '', ...restProps }) => (
@@ -69,12 +70,13 @@ class FlexExample  extends React.Component {
     super(props);
     this.state = {
       disabled: false,
-      GetRequest:GetRequest
+      GetRequest:GetRequest,
+      mock:Gmock
     }
-    
     console.log(this.state.GetRequest(this.props.prop.location.search))
   }
   componentDidMount(){
+    // this.state.mock('',{settingCode:1010100010})
   }
   render(){
       return (
@@ -143,15 +145,16 @@ class Lunbo extends React.Component {
             //   beforeChange={(from, to) => console.log(`slide from ${from} to ${to}`)}
             //   afterChange={index => console.log('slide to', index)}
             >
-              {this.state.data.map(val => (
+              {this.state.data.map((val,index) => (
                 <div
                   key={val}
+                 
                   // href="http://www.alipay.com"
                   style={{ display: 'inline-block', width: '100%', height: this.state.imgHeight }}
                 >
                   <img
                     src={banner}
-                    alt=""
+                    alt={index}
                     style={{ width: '100%', verticalAlign: 'top' }}
                     onLoad={() => {
                       // fire window resize event to change height

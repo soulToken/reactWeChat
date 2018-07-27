@@ -5,24 +5,16 @@ import { PullToRefresh, ListView, Button } from 'antd-mobile';
 import bannerUrl from '../../static/images/homepage_banner@3x.png';
 import './index.css'
 
-const data = [
-  {
-    img: 'https://zos.alipayobjects.com/rmsportal/dKbkpPXKfvZzWCM.png',
-    title: 'Meet hotel',
-    des: '不是所有的兼职汪都需要风吹日晒',
-  },
-  {
-    img: 'https://zos.alipayobjects.com/rmsportal/XmwCzSeJiqpkuMB.png',
-    title: 'McDonald\'s invites you',
-    des: '不是所有的兼职汪都需要风吹日晒',
-  },
-  {
-    img: 'https://zos.alipayobjects.com/rmsportal/hfVtzEhPzTUewPm.png',
-    title: 'Eat the week',
-    des: '不是所有的兼职汪都需要风吹日晒',
-  },
-];
-const NUM_ROWS = 20;
+
+// const data = [
+//   {
+//     img: 'https://zos.alipayobjects.com/rmsportal/dKbkpPXKfvZzWCM.png',
+//     title: 'Meet hotel',
+//     des: '不是所有的兼职汪都需要风吹日晒',
+//   }
+// ];
+
+const NUM_ROWS = 5;
 let pageIndex = 0;
 
 function genData(pIndex = 0) {
@@ -44,6 +36,7 @@ class App extends React.Component {
       dataSource,
       refreshing: true,
       isLoading: true,
+      data:[],
       height: document.documentElement.clientHeight,
       useBodyScroll: true,
     };
@@ -67,6 +60,30 @@ class App extends React.Component {
   }
 
   componentDidMount() {
+
+
+  this.setState({
+    data:  [
+        {
+          img: 'https://zos.alipayobjects.com/rmsportal/dKbkpPXKfvZzWCM.png',
+          title: 'Meet hotel',
+          des: '不是所有的兼职汪都需要风吹日晒',
+          id:1
+        },
+        {
+          img: 'https://zos.alipayobjects.com/rmsportal/dKbkpPXKfvZzWCM.png',
+          title: 'Meet hotel',
+          des: '不是所有的兼职汪都需要风吹日晒',
+          id:2
+        },
+        {
+          img: 'https://zos.alipayobjects.com/rmsportal/dKbkpPXKfvZzWCM.png',
+          title: 'Meet hotel',
+          des: '不是所有的兼职汪都需要风吹日晒',
+          id:3
+        }
+      ]
+  })
     const hei = this.state.height - ReactDOM.findDOMNode(this.lv).offsetTop;
 
     setTimeout(() => {
@@ -77,6 +94,7 @@ class App extends React.Component {
         refreshing: false,
         isLoading: false,
       });
+      console.log(this.state)
     }, 1500);
   }
 
@@ -99,15 +117,30 @@ class App extends React.Component {
     if (this.state.isLoading && !this.state.hasMore) {
       return;
     }
+    var self=this;
     console.log('reach end', event);
-    this.setState({ isLoading: true });
+    var data=[
+      {
+        img: 'https://zos.alipayobjects.com/rmsportal/dKbkpPXKfvZzWCM.png',
+        title: 'Meet hotel',
+        des: '不是所有的兼职汪都需要风吹日晒',
+        id:6
+      }
+    ].concat(this.state.data)
+    this.setState({ 
+      isLoading: true ,
+      data:data
+    });
     setTimeout(() => {
+    
       this.rData = [...this.rData, ...genData(++pageIndex)];
       this.setState({
         dataSource: this.state.dataSource.cloneWithRows(this.rData),
         isLoading: false,
       });
+      console.log(this.state)
     }, 1000);
+  
   };
 
   render() {
@@ -122,12 +155,12 @@ class App extends React.Component {
         }}
       />
     );
-    let index = data.length - 1;
+    let index = this.state.data.length - 1;
     const row = (rowData, sectionID, rowID) => {
       if (index < 0) {
-        index = data.length - 1;
+        index = this.state.data.length - 1;
       }
-      const obj = data[index--];
+      const obj = this.state.data[index--];
       return (
         <div key={rowID}
           style={{
@@ -139,7 +172,7 @@ class App extends React.Component {
             <img style={{ height: '117px', width: '117px', marginRight: '17px' }} src={obj.img} alt="" />
             <div style={{ flex:'1',width:'0'}}>
               <div className="twoEllipsis" style={{WebkitBoxOrient: 'vertical'}}>{obj.des}-{rowData}</div>
-              <div style={{  marginTop:'10px'}}><span className="money" style={{ fontSize: '30px', color: '#FF6E27' }}>￥{rowID}</span></div>
+              <div style={{  marginTop:'10px'}}><span className="money" style={{ fontSize: '30px', color: '#FF6E27' }}>￥{rowID} id是 {obj.id}</span></div>
             </div>
           </div>
         </div>
@@ -149,6 +182,13 @@ class App extends React.Component {
       
       <ListView
       className="service_box"
+        // style={{
+        //   height:'100%',
+        //   overflow: 'auto',
+        // } 
+        // }
+        //邻近值为 100 时 调用
+        onEndReachedThreshold={100}
         key={this.state.useBodyScroll ? '0' : '1'}
         ref={el => this.lv = el}
         dataSource={this.state.dataSource}
