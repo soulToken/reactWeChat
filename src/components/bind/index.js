@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { List, InputItem, Button,WhiteSpace } from 'antd-mobile';
+import { List, InputItem, Button,Toast } from 'antd-mobile';
 import './index.css'
 import phoneUrl from '../../static/svg/phone_phone.svg'
 import codeUrl from '../../static/svg/phone_verification.svg'
@@ -53,6 +53,8 @@ class App extends React.Component{
           }
           //去注册
           gotoBind=()=>{
+            Toast.success('成功', 1);
+
               console.log('电话号:'+this.phoneNumber.state.value.replace(/ /g,''),'验证码:'+this.codeNumber.state.value.replace(/ /g,''))
           }
           render(){

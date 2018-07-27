@@ -1,0 +1,9 @@
+
+项目结构
+        util 文件夹中是 自己封装的一些公用的方法
+
+
+
+
+注意点：
+   this.props.match.params.id   可以获取   /my/:id    可以获取其中的值

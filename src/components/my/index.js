@@ -74,6 +74,8 @@ class ListExample extends React.Component {
       disabled: false,
       match: this.props.match.path,
       history: this.props.history,
+      sex:null,
+      ex:"qian",
       date: now,
       time: now,
       utcDate: utcNow,
@@ -81,7 +83,6 @@ class ListExample extends React.Component {
       customChildValue: null,
       visible: false,
     }
- 
   }
   changeName=() => {
     prompt('', '请输入名字',
@@ -110,7 +111,20 @@ class ListExample extends React.Component {
   ], 'default', null, ['请输入姓名'])
 }
 goBind=()=>{
+
+  Toast.loading('Loading...', 0, () => {
+    console.log('Load complete !!!');
+  },true);
   this.props.history.push('/bind')
+}
+chooseSex=(v)=>{
+  if(v){
+    return district.filter(function(item){
+      return item.value==v
+    })[0].label
+  }
+  
+  
 }
   render() {
     return (
@@ -131,20 +145,23 @@ goBind=()=>{
             >姓名</Item>
              <Picker data={district} cols={1}  
                     className="forss"
-                    onChange={v =>console.log(v,1)}
-                       onOk={v => console.log(v,2)}
-            
+                    value={[this.state.sex]}
+                    onChange={v =>this.setState({sex:v[0]})}
+                    onOk={v =>this.setState({sex:v[0]})}
+                    extra={this.chooseSex(this.state.sex)}
             >
-              <List.Item 
+              <Item 
                thumb={sexUrl}
-              arrow="horizontal">性别</List.Item>
+             
+                extra={'女'}
+              arrow="horizontal">性别</Item>
             </Picker>
-
-
             <DatePicker
               mode="date"
-              title="Select Date"
+              title="选择日期"
               extra="Optional"
+              minDate={new Date("1900-1-1")}
+              maxDate={this.state.time}
               value={this.state.date}
               onChange={date => this.setState({ date })}
             >
