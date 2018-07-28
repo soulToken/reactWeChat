@@ -11,7 +11,7 @@ export default function({component:Component,...rest}){
     return <Route {...rest} render={(props)=>
             localStorage.getItem('login')?<Component/>:
             <Redirect to={{
-                pathname:"/login",
+                pathname:"/",
                 state:{from:props.location.pathname}
             }}></Redirect>
     }></Route>

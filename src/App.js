@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 // import logo from './logo.svg';
 import * as apis from './api/api';
 import { HashRouter as Router, Route, Link, Switch } from "react-router-dom";
-// import PropectedRouter from './router/PropectedRouter';
+import PropectedRouter from './router/PropectedRouter';
 import { addGun } from './redux'
 import Login from './components/login'
 import Nofound from './components/errorPages/nofound'
@@ -84,7 +84,7 @@ class App extends Component {
             <Route path="/serviceItems" component={ServiceItems} ></Route>
             <Route path="/doctorTeam" component={DoctorTeam} ></Route>
             <Route path="/activity" component={Activity} ></Route>
-            <Route path="/bind" component={Bind} ></Route>
+            <PropectedRouter path="/bind" component={Bind} ></PropectedRouter>
             {/* <PropectedRouter path="/my" component={My}></PropectedRouter> */}
             <Route component={Nofound}></Route>
           </Switch>
