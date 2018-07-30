@@ -18,6 +18,7 @@ class App extends React.Component{
             getClinicBaseinfo:getClinicBaseinfo,
             obj:null,
             headUrl:'',
+            show:false,
             edtPhone:null,
             city:null,
             area:null,
@@ -46,7 +47,8 @@ class App extends React.Component{
                                 street:obj.result.street,
                                 address:obj.result.address,
                                 clinicIntroduce:obj.result.clinicIntroduce,
-                                clinicEnvironmentList:obj.result.clinicEnvironmentList
+                                clinicEnvironmentList:obj.result.clinicEnvironmentList,
+                                show:true
         
                             })
                     }else{
@@ -66,8 +68,15 @@ class App extends React.Component{
   }
     render(){
         return(
+            <div>
+                     {this.state.show ? (
+                            
+
+
+
             <div className="introduce_Box">
-                <div className="introduce_top">
+         
+            <div className="introduce_top">
                {this.state.headUrl &&
                     <img className="introduce_banner"  src={this.state.headUrl} />
                 }
@@ -112,8 +121,14 @@ class App extends React.Component{
                     </div>
  
                  )}
+                
                     
                 
+            </div>
+        
+      ) : (
+        <div></div>
+      )}
             </div>
         )
     }
