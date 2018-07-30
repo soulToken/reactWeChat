@@ -2,9 +2,10 @@ import React from 'react';
 import ReactDOM from 'react-dom'
 import { Route } from "react-router-dom";
 /* eslint no-dupe-keys: 0, no-mixed-operators: 0 */
-import { PullToRefresh, ListView, Button } from 'antd-mobile';
+import { PullToRefresh, ListView, Button,Toast } from 'antd-mobile';
 import bannerUrl from '../../static/images/homepage_banner@3x.png';
 import Detail from './detail/index'
+import {getClinicDoctorList} from '../../api/api'
 import './index.css'
 
 const data = [
@@ -50,21 +51,16 @@ class App extends React.Component {
       refreshing: true,
       isLoading: true,
       height: document.documentElement.clientHeight,
+      data:[],
       useBodyScroll: true,
-      prop:props
+      prop:props,
+      getClinicDoctorList:getClinicDoctorList
     };
   }
 
-  // If you use redux, the data maybe at props, you need use `componentWillReceiveProps`
-  // componentWillReceiveProps(nextProps) {
-  //   if (nextProps.dataSource !== this.props.dataSource) {
-  //     this.setState({
-  //       dataSource: this.state.dataSource.cloneWithRows(nextProps.dataSource),
-  //     });
-  //   }
-  // }
 
   componentDidUpdate() {
+   
     if (this.state.useBodyScroll) {
       document.body.style.overflow = 'auto';
     } else {
@@ -72,31 +68,51 @@ class App extends React.Component {
     }
   }
 
-  componentDidMount() {
-    const hei = this.state.height - ReactDOM.findDOMNode(this.lv).offsetTop;
 
-    setTimeout(() => {
-      this.rData = genData();
-      this.setState({
-        dataSource: this.state.dataSource.cloneWithRows(genData()),
-        height: hei,
-        refreshing: false,
-        isLoading: false,
-      });
-    }, 1500);
+  componentDidMount() {
+      this.genDataList()
   }
+  //获取列表数据决口
+  genDataList = (pos=1,count=5,fresh) =>{
+    var self=this;
+    const hei = this.state.height - ReactDOM.findDOMNode(this.lv).offsetTop;
+    var param="position="+pos+"&count="+count
+    this.state.getClinicDoctorList(param).then(function(res){
+      if (res.ok) {
+        res.json().then((obj)=> {
+            if(obj.resultCode==="1000"){ 
+
+              //判断是否是刷新操作
+              if(fresh){
+                var newData=obj.result;
+              }else{
+                var newData=self.state.data.concat(obj.result);
+              }
+                 self.setState({
+                   data:newData,
+                   dataSource: self.state.dataSource.cloneWithRows(newData),
+                   height: hei,
+                   refreshing: false,
+                   isLoading: false,
+                 })     
+
+            }else{
+                Toast.fail(obj.resultMsg, 1);
+            }
+           
+
+        })
+
+    }
+    }).catch(function(){
+      Toast.fail("网络错误", 1);
+    })
+  }
+
 
   onRefresh = () => {
     this.setState({ refreshing: true, isLoading: true });
-    // simulate initial Ajax
-    setTimeout(() => {
-      this.rData = genData();
-      this.setState({
-        dataSource: this.state.dataSource.cloneWithRows(this.rData),
-        refreshing: false,
-        isLoading: false,
-      });
-    }, 600);
+    this.genDataList(1,5,1)
   };
 
   onEndReached = (event) => {
@@ -107,18 +123,61 @@ class App extends React.Component {
     }
     console.log('reach end', event);
     this.setState({ isLoading: true });
-    setTimeout(() => {
-      this.rData = [...this.rData, ...genData(++pageIndex)];
-      this.setState({
-        dataSource: this.state.dataSource.cloneWithRows(this.rData),
-        isLoading: false,
-      });
-    }, 1000);
+    this.genDataList(this.state.data.length)
+    // setTimeout(() => {
+    //   // this.rData = [...this.rData, ...genData(++pageIndex)];
+    //   this.setState({
+    //     dataSource: this.state.dataSource.cloneWithRows(this.state.data),
+    //     isLoading: false,
+    //   });
+    // }, 1000);
   };
   //执行的一个点击事件 判断跳转到 医生详情页面
   handleClick=(e)=>{
         this.props.history.push(`/doctorTeam/${e}`)      
   }
+
+  _renderRow(row, sectionId, rowId) {
+    return (
+      <div key={row.doctorId}
+          style={{
+            paddingLeft:'12px',
+            paddingRight:'12px',
+            background:'rgba(255,255,255,1)',
+            boxShadow:'0px 1px 3px 1px rgba(0,0,0,0.15)',
+            borderRadius:'14px'
+          }}
+        >
+          <div style={{ display: '-webkit-box', display: 'flex', padding: '15px',flexDirection:'row' }}>
+            <img style={{ height: '85px', width: '85px', marginRight: '17px',borderRadius:'50%' }} src={row.headUrl} alt="" />
+            <div style={{ flex:'1',width:'0'}}>
+              <div  className="team_right">
+                    <div>
+                        <div className="doctor_name">{row.doctorName}</div>
+                        <div className="doctor_type">{row.positio}</div>
+                    </div>
+              
+                    {/* (e)=>{
+                        console.log(this.state.prop)
+                        var id=e.currentTarget.getAttribute("data-obj")
+                          debugger;
+                        // this.state.prop.history.location.push(`/doctorTeam/${id}`)
+              } */}
+
+                    <div className="checkedDetail"  data-obj={row.id}  onClick={this.handleClick.bind(this,row.doctorId)}>查看详情</div>
+              
+                </div>
+              <div className="twoEllipsis2" style={{  marginTop:'10px',WebkitBoxOrient: 'vertical'}}>
+              {/* ￥{rowID} */}
+              {row.selfDescription}
+              </div>
+            </div>
+          </div>
+        </div>
+        
+    )
+  }
+
   render() {
     const separator = (sectionID, rowID) => (
       <div
@@ -130,58 +189,14 @@ class App extends React.Component {
           borderBottom: '1px solid #ECECED',
         }}
       />
-    );
-    let index = data.length - 1;
-    const row = (rowData, sectionID, rowID,highlightRow) => {
-       
-      if (index < 0) {
-        index = data.length - 1;
-      }
-      const obj = data[index--];
-      return (
-        <div key={rowID}
-          style={{
-            paddingLeft:'12px',
-            paddingRight:'12px',
-            background:'rgba(255,255,255,1)',
-            boxShadow:'0px 1px 3px 1px rgba(0,0,0,0.15)',
-            borderRadius:'14px'
-          }}
-        >
-          <div style={{ display: '-webkit-box', display: 'flex', padding: '15px',flexDirection:'row' }}>
-            <img style={{ height: '85px', width: '85px', marginRight: '17px',borderRadius:'50%' }} src={obj.img} alt="" />
-            <div style={{ flex:'1',width:'0'}}>
-              <div  className="team_right">
-                    <div>
-                        <div className="doctor_name">杨铁柱</div>
-                        <div className="doctor_type">主治医生</div>
-                    </div>
-              
-                    {/* (e)=>{
-                        console.log(this.state.prop)
-                        var id=e.currentTarget.getAttribute("data-obj")
-                          debugger;
-                        // this.state.prop.history.location.push(`/doctorTeam/${id}`)
-              } */}
-
-                    <div className="checkedDetail"  data-obj={obj.id}  onClick={this.handleClick.bind(this,obj.id)}>查看详情</div>
-              
-                </div>
-              <div className="twoEllipsis2" style={{  marginTop:'10px',WebkitBoxOrient: 'vertical'}}>
-              {/* ￥{rowID} */}
-              擅长中医诊疗、中医用药。善于使 用艾灸、针灸针对性治疗疾……擅长中医诊疗、中医用药。善于使 用艾灸、针灸针对性治疗疾……擅长中医诊疗、中医用药。善于使 用艾灸、针灸针对性治疗疾……
-              </div>
-            </div>
-          </div>
-        </div>
-      );
-    };
+    )
     return (
     <div
     style={{
         paddingLeft:'12px',
         paddingRight:'12px',
-        paddingTop:'10px'
+        paddingTop:'10px',
+        backgroundColor:'rgb(245, 245, 249)'
     }}
     >
       
@@ -189,12 +204,13 @@ class App extends React.Component {
       className="service_box"
         key={this.state.useBodyScroll ? '0' : '1'}
         ref={el => this.lv = el}
+        onEndReachedThreshold={120}
         dataSource={this.state.dataSource}
         renderFooter={() => (<div style={{ padding: 30, textAlign: 'center' }}>
-          {this.state.isLoading ? 'Loading...' : 'Loaded'}
+          {this.state.isLoading ? "加载中..." : '暂无更多数据'}
         </div>)}
         renderRow={
-           row
+          this._renderRow.bind(this)
         }
      
         renderSeparator={separator}
@@ -208,7 +224,7 @@ class App extends React.Component {
           refreshing={this.state.refreshing}
           onRefresh={this.onRefresh}
         />}
-        onEndReached={this.onEndReached}
+        onEndReached={this.onEndReached.bind(this)}
         pageSize={5}
       />
     </div>);

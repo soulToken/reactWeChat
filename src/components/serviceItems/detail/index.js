@@ -1,70 +1,81 @@
 import React from 'react';
-import ReactSVG from 'react-svg'
-import svg1 from '../../../static/svg/消息.svg'
-import { ImagePicker, WingBlank, SegmentedControl } from 'antd-mobile';
-
-const data = [{
-  url: 'https://zos.alipayobjects.com/rmsportal/PZUUCKTRIHWiZSY.jpeg',
-  id: '2121',
-}, {
-  url: 'https://zos.alipayobjects.com/rmsportal/hqQWgTXdrlmVVYi.jpeg',
-  id: '2122',
-}];
-const a="<p>asdsadsadad</p>"
+import {Toast } from 'antd-mobile';
+import {getClinicServerIteamDetail} from '../../../api/api'
 class ImagePickerExample extends React.Component {
-
     constructor(props) {
         super(props);
-    
           this.state = {
-            files: data,
-            multiple: false,
+            getClinicServerIteamDetail:getClinicServerIteamDetail,
+            id:this.props.match.params.id,
+            result:null,
+            show:false,
          
-    }}
-    
-    componentDidMount(){
-        console.log(this.props)
     }
-  onChange = (files, type, index) => {
-    console.log(files, type, index);
-    this.setState({
-      files,
-    });
-  }
-  onSegChange = (e) => {
-    const index = e.nativeEvent.selectedSegmentIndex;
-    this.setState({
-      multiple: index === 1,
-    });
-  }
-  onAddImage=(e,index)=>{
-    console.log(e,index)
-  }
-
+  } 
+    componentDidMount(){
+        this.getDetail()
+    }
+    getDetail=()=>{
+      var self=this;
+      var param="id="+this.state.id;
+      Toast.loading('Loading...', 0, () => {
+        
+      });
+      this.state.getClinicServerIteamDetail(param).then(function(res){
+        if (res.ok) {
+          res.json().then((obj)=> {
+            Toast.hide()
+              if(obj.resultCode==="1000"){ 
+                      //判断是否是刷新操作
+                   self.setState({
+                      result:obj.result.serverDetail,
+                      show:true
+                   })     
+  
+              }else{
+                  Toast.fail(obj.resultMsg, 1);
+              }
+             
+  
+          })
+  
+      }
+      }).catch(function(){
+        Toast.fail("网络错误", 1);
+      })
+    }
   render() {
-    const { files } = this.state;
     return (
-      <WingBlank>
-        <SegmentedControl
-          values={['切换到单选', '切换到多选']}
-          selectedIndex={this.state.multiple ? 1 : 0}
-          onChange={this.onSegChange}
-        />
-        <div  dangerouslySetInnerHTML={{
-              __html: a
-            }}>    
-        </div>
-        <ImagePicker
-          files={files}
-          onChange={this.onChange}
-          onAddImageClick={this.onAddImage}
-          onImageClick={(index, fs) => console.log(index, fs)}
-          selectable={files.length < 5}
-          multiple={this.state.multiple}
-        />
-      </WingBlank>
+      <div style={
+        {
+          paddingLeft:'15px',
+          paddingRight:'15px'
+        }
+      }>
+        {this.state.result ? (
+               <div    dangerouslySetInnerHTML={{
+                __html: this.state.result
+              }}>
+              </div>
+      ) : ( 
+         <div style={{textAlign:'center',marginTop:'100px'}}>
+         
+                    {this.state.show ? (
+                        <div style={{textAlign:'center',marginTop:'100px'}}>
+                        暂无相关数据
+                      </div>
+                        
+                  ) : ( 
+                    <div style={{textAlign:'center',marginTop:'100px'}}>
+                  
+                       </div>
+                    
+                  )}
+         
+         </div>
+      )}
+      </div>
     );
   }
 }
-
 export default ImagePickerExample

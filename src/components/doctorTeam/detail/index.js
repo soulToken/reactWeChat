@@ -4,11 +4,53 @@ import url from '../../../static/images/doctor_team_background@3x.png'
 import hearUrl from '../../../static/images/doctor_team_portrait@3x.png'
 import person from '../../../static/svg/doctor_team_introduction.svg'
 import honor from '../../../static/svg/doctor_team_honor.svg'
+import {getClinicDoctorDetail} from '../../../api/api'
+import {Toast} from 'antd-mobile'
 import './index.css'
 
 class App extends React.Component{
     constructor(props) {
         super(props);
+        this.state={
+            doctorId:this.props.match.params.id,
+            getClinicDoctorDetail:getClinicDoctorDetail,
+            headUrl:null,
+            doctorName:null,
+            positio:null,
+            selfDescription:null,
+            honorList:[]
+        }
+    }
+    componentDidMount() {
+        this.getDetail()
+    }
+
+    getDetail=()=>{
+        var self=this;
+        var param="doctorId="+this.state.doctorId
+        this.state.getClinicDoctorDetail(param).then(function(res){
+            if (res.ok) {
+              res.json().then((obj)=> {
+                  if(obj.resultCode==="1000"){ 
+                            self.setState({
+                                headUrl:obj.result.headUrl,
+                                doctorName:obj.result.doctorName,
+                                positio:obj.result.positio,
+                                selfDescription:obj.result.selfDescription,
+                                honorList:obj.result.honorList
+                            })
+                  }else{
+                      Toast.fail(obj.resultMsg, 1);
+                  }
+                 
+      
+              })
+      
+          }
+          }).catch(function(){
+            Toast.fail("网络错误", 1);
+          })
+              
     }
     render(){
         return (
@@ -18,11 +60,11 @@ class App extends React.Component{
                             background:'url('+url+') no-repeat center',
                             backgroundSize:'100%,100%'
                             }}>
-                            <img src={hearUrl} className="detail_head_URL" />
+                            <img src={this.state.headUrl} className="detail_head_URL" />
                             <div className="detail_detail">
-                            杨铁铸 
+                            {this.state.doctorName} 
                             
-                            <span style={{fontSize:'14px',marginLeft:'10px'}}> (主任医师)</span>
+                            <span style={{fontSize:'14px',marginLeft:'10px'}}> ({this.state.positio})</span>
                             
                             </div>
                 </div>
@@ -33,7 +75,7 @@ class App extends React.Component{
                                <span style={{marginLeft:'15px',fontSize:'16px'}}>个人介绍</span>
                            </div>
                            <div className="in_de" style={{marginTop:'18px'}}>
-                           擅长中医诊疗、中医用药。善于使用艾灸、针 灸针对性治疗各种疾病。尤其擅长治疗感冒、 咳嗽、肺热、头痛失眠等症状。
+                            {this.state.selfDescription}
                            </div>
                     
                     
@@ -44,15 +86,13 @@ class App extends React.Component{
                                <img src={honor}/>
                                <span style={{marginLeft:'15px',fontSize:'16px'}}>获奖荣誉</span>
                            </div>
-                           <div className="in_de" >
-                           2017年12月获得深圳市十佳医生称号
-                           </div>
-                           <div className="in_de" >
-                           2017年12月获得深圳市十佳医生称号
-                           </div>
-                           <div className="in_de" >
-                           2017年12月获得深圳市十佳医生称号
-                           </div>
+
+                           {this.state.honorList.map((number,index) =>
+                                    <div className="in_de" key={index}  >
+                                    {number.authContent}
+                                    </div>
+                            )}
+                          
                     
                     
                     </div>

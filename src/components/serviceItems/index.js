@@ -2,9 +2,10 @@ import React from 'react';
 import ReactDOM from 'react-dom'
 /* eslint no-dupe-keys: 0, no-mixed-operators: 0 */
 import { Route } from "react-router-dom";
-import { PullToRefresh, ListView, Button } from 'antd-mobile';
+import { PullToRefresh, ListView, Button ,Toast} from 'antd-mobile';
 import bannerUrl from '../../static/images/homepage_banner@3x.png';
-import Topic from './detail/index'
+import Topic from './detail/index';
+import {getClinicServerIteamList} from '../../api/api';
 import './index.css'
 
 
@@ -33,26 +34,16 @@ class App extends React.Component {
     const dataSource = new ListView.DataSource({
       rowHasChanged: (row1, row2) => row1 !== row2,
     });
-
     this.state = {
       dataSource,
       refreshing: true,
       isLoading: true,
       data:[],
+      getClinicServerIteamList:getClinicServerIteamList,
       height: document.documentElement.clientHeight,
       useBodyScroll: true,
     };
   }
-
-  // If you use redux, the data maybe at props, you need use `componentWillReceiveProps`
-  // componentWillReceiveProps(nextProps) {
-  //   if (nextProps.dataSource !== this.props.dataSource) {
-  //     this.setState({
-  //       dataSource: this.state.dataSource.cloneWithRows(nextProps.dataSource),
-  //     });
-  //   }
-  // }
-
   componentDidUpdate() {
     if (this.state.useBodyScroll) {
       document.body.style.overflow = 'auto';
@@ -62,41 +53,42 @@ class App extends React.Component {
   }
 
   componentDidMount() {
-  this.setState({
-    data:  [
-        {
-          img: 'https://zos.alipayobjects.com/rmsportal/dKbkpPXKfvZzWCM.png',
-          title: 'Meet hotel',
-          des: '不是所有的兼职汪都需要风吹日晒',
-          id:1
-        },
-        {
-          img: 'https://zos.alipayobjects.com/rmsportal/dKbkpPXKfvZzWCM.png',
-          title: 'Meet hotel',
-          des: '不是所有的兼职汪都需要风吹日晒',
-          id:2
-        },
-        {
-          img: 'https://zos.alipayobjects.com/rmsportal/dKbkpPXKfvZzWCM.png',
-          title: 'Meet hotel',
-          des: '不是所有的兼职汪都需要风吹日晒',
-          id:3
-        }
-      ]
-  })
-    const hei = this.state.height - ReactDOM.findDOMNode(this.lv).offsetTop;
+    this.getList()
+  // this.setState({
+  //   data:  [
+  //       {
+  //         img: 'https://zos.alipayobjects.com/rmsportal/dKbkpPXKfvZzWCM.png',
+  //         title: 'Meet hotel',
+  //         des: '不是所有的兼职汪都需要风吹日晒',
+  //         id:1
+  //       },
+  //       {
+  //         img: 'https://zos.alipayobjects.com/rmsportal/dKbkpPXKfvZzWCM.png',
+  //         title: 'Meet hotel',
+  //         des: '不是所有的兼职汪都需要风吹日晒',
+  //         id:2
+  //       },
+  //       {
+  //         img: 'https://zos.alipayobjects.com/rmsportal/dKbkpPXKfvZzWCM.png',
+  //         title: 'Meet hotel',
+  //         des: '不是所有的兼职汪都需要风吹日晒',
+  //         id:3
+  //       }
+  //     ]
+  // })
+  //   const hei = this.state.height - ReactDOM.findDOMNode(this.lv).offsetTop;
 
-    setTimeout(() => {
-      this.rData = genData();
-      var data=this.state.data
-      this.setState({
-        dataSource: this.state.dataSource.cloneWithRows(data),
-        height: hei,
-        refreshing: false,
-        isLoading: false,
-      });
-      console.log(this.state)
-    }, 1500);
+  //   setTimeout(() => {
+  //     this.rData = genData();
+  //     var data=this.state.data
+  //     this.setState({
+  //       dataSource: this.state.dataSource.cloneWithRows(data),
+  //       height: hei,
+  //       refreshing: false,
+  //       isLoading: false,
+  //     });
+  //     console.log(this.state)
+  //   }, 1500);
   }
 
 
@@ -109,15 +101,58 @@ class App extends React.Component {
       }}
     >
       <div  onClick={this.gotoDetail.bind(this,row.id)} style={{ display: '-webkit-box', display: 'flex', padding: '15px',flexDirection:'row' }}>
-        <img style={{ height: '117px', width: '117px', marginRight: '17px' }} src={row.img} alt="" />
+        <img style={{ height: '117px', width: '117px', marginRight: '17px' }} src={row.clisPic} alt="" />
         <div style={{ flex:'1',width:'0'}}>
-          <div className="twoEllipsis" style={{WebkitBoxOrient: 'vertical'}}>{row.des}</div>
-          <div style={{  marginTop:'10px'}}><span className="money" style={{ fontSize: '30px', color: '#FF6E27' }}>￥ id是 {row.id}</span></div>
+          <div className="twoEllipsis" style={{WebkitBoxOrient: 'vertical'}}>{row.clisName}</div>
+          <div style={{  marginTop:'10px'}}><span className="money" style={{ fontSize: '30px', color: '#FF6E27' }}>
+         
+          {row.clisPrice ? (
+            <span>￥{row.clisPrice }</span>
+          ) : (
+            <span>暂无相关价格</span>
+          )}
+          
+          </span></div>
         </div>
       </div>
     </div>
         
     )
+  }
+  //列表接口
+  getList=(pos=1,count=5,fresh)=>{
+    var self=this;
+    const hei = this.state.height - ReactDOM.findDOMNode(this.lv).offsetTop;
+    var param="position="+pos+"&count="+count
+    this.state.getClinicServerIteamList(param).then(function(res){
+      if (res.ok) {
+        res.json().then((obj)=> {
+            if(obj.resultCode==="1000"){ 
+                    //判断是否是刷新操作
+              if(fresh){
+                var newData=obj.result;
+              }else{
+                var newData=self.state.data.concat(obj.result);
+              }
+                 self.setState({
+                   data:newData,
+                   dataSource: self.state.dataSource.cloneWithRows(newData),
+                   height: hei,
+                   refreshing: false,
+                   isLoading: false,
+                 })     
+
+            }else{
+                Toast.fail(obj.resultMsg, 1);
+            }
+           
+
+        })
+
+    }
+    }).catch(function(){
+      Toast.fail("网络错误", 1);
+    })
   }
   //跳转到详情页面
   gotoDetail=(id)=>{
@@ -125,15 +160,16 @@ class App extends React.Component {
   }
   onRefresh = () => {
     this.setState({ refreshing: true, isLoading: true });
-    // simulate initial Ajax
-    setTimeout(() => {
-      this.rData = genData();
-      this.setState({
-        dataSource: this.state.dataSource.cloneWithRows(this.state.data),
-        refreshing: false,
-        isLoading: false,
-      });
-    }, 600);
+    this.getList(1,5,1)
+    // // simulate initial Ajax
+    // setTimeout(() => {
+    //   this.rData = genData();
+    //   this.setState({
+    //     dataSource: this.state.dataSource.cloneWithRows(this.state.data),
+    //     refreshing: false,
+    //     isLoading: false,
+    //   });
+    // }, 600);
   };
 
   onEndReached = (event) => {
@@ -144,28 +180,29 @@ class App extends React.Component {
     }
     var self=this;
     console.log('reach end', event);
-    var data=[
-      {
-        img: 'https://zos.alipayobjects.com/rmsportal/dKbkpPXKfvZzWCM.png',
-        title: 'Meet hotel',
-        des: '不是所有的兼职汪都需要风吹日晒',
-        id:6
-      }
-    ]
-    data=this.state.data.concat(data)
-    this.setState({ 
-      isLoading: true ,
-      data:data
-    });
-    setTimeout(() => {
+    this.getList(this.state.data.length)
+    // var data=[
+    //   {
+    //     img: 'https://zos.alipayobjects.com/rmsportal/dKbkpPXKfvZzWCM.png',
+    //     title: 'Meet hotel',
+    //     des: '不是所有的兼职汪都需要风吹日晒',
+    //     id:6
+    //   }
+    // ]
+    // data=this.state.data.concat(data)
+    // this.setState({ 
+    //   isLoading: true ,
+    //   data:data
+    // });
+    // setTimeout(() => {
     
-      // this.rData = [...this.rData, ...genData(++pageIndex)];
-      this.setState({
-        dataSource: this.state.dataSource.cloneWithRows(data),
-        isLoading: false,
-      });
-      console.log(this.state)
-    }, 1000);
+    //   // this.rData = [...this.rData, ...genData(++pageIndex)];
+    //   this.setState({
+    //     dataSource: this.state.dataSource.cloneWithRows(data),
+    //     isLoading: false,
+    //   });
+    //   console.log(this.state)
+    // }, 1000);
   
   };
   render() {
@@ -196,7 +233,7 @@ class App extends React.Component {
         dataSource={this.state.dataSource}
         renderHeader={() => <div  style={{height:'228px',width:'100%'}}><img style={{height:'100%',width:'100%'}} src={bannerUrl}/></div>}
         renderFooter={() => (<div style={{ padding: 30, textAlign: 'center' }}>
-          {this.state.isLoading ? 'Loading...' : ''}
+          {this.state.isLoading ? '加载中...' : '无更多数据'}
         </div>)}
         renderRow={this._renderRow.bind(this)}
         renderSeparator={separator}
@@ -210,7 +247,7 @@ class App extends React.Component {
           refreshing={this.state.refreshing}
           onRefresh={this.onRefresh}
         />}
-        onEndReached={this.onEndReached}
+        onEndReached={this.onEndReached.bind(this)}
         pageSize={5}
       />
     </div>);

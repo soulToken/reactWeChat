@@ -16,7 +16,6 @@ import activity from '../../static/svg/homepage_activity.svg'
 import wifi from '../../static/svg/homepage_wifi.svg'
 import mall from '../../static/svg/homepage_mall.svg'
 import  {GetRequest} from '../../util/index'
-import {Gmock} from '../../api/api'
 
 
 const PlaceHolder = ({ className = '', ...restProps }) => (
@@ -70,8 +69,7 @@ class FlexExample  extends React.Component {
     super(props);
     this.state = {
       disabled: false,
-      GetRequest:GetRequest,
-      mock:Gmock
+      GetRequest:GetRequest
     }
     console.log(this.state.GetRequest(this.props.prop.location.search))
   }
