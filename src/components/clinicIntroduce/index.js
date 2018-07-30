@@ -5,27 +5,95 @@ import phone from '../../static/svg/clinic_introduction_telephone.svg'
 import address from '../../static/svg/clinic_introduction_address.svg'
 import navigation from '../../static/svg/clinic_introduction_navigation.svg'
 
+import { Toast } from 'antd-mobile';
+import {getClinicBaseinfo} from '../../api/api'
+//图片放大组件
+import Zmage from 'react-zmage'
+
 
 class App extends React.Component{
     constructor(props) {
       super(props);
-    
+        this.state={
+            getClinicBaseinfo:getClinicBaseinfo,
+            obj:null,
+            headUrl:'',
+            edtPhone:null,
+            city:null,
+            area:null,
+            street:null,
+            address:null,
+            clinicIntroduce:null,
+            clinicEnvironmentList:[]
+        }
     }
+  componentDidMount() {
+      var self=this;
+      Toast.loading('Loading...', 0, () => {
+      
+      },true);
+        this.state.getClinicBaseinfo().then((res)=>{
+            if (res.ok) {
+
+                res.json().then((obj)=> {
+                    if(obj.resultCode==="1000"){
+                            Toast.hide()
+                            self.setState({
+                                headUrl:obj.result.headUrl,
+                                edtPhone:obj.result.edtPhone,
+                                city:obj.result.city,
+                                area:obj.result.area,
+                                street:obj.result.street,
+                                address:obj.result.address,
+                                clinicIntroduce:obj.result.clinicIntroduce,
+                                clinicEnvironmentList:obj.result.clinicEnvironmentList
+        
+                            })
+                    }else{
+                        Toast.fail(obj.resultCode, 1);
+                    }
+                   
+        
+                })
+        
+            }
+        }
+        ).catch((res)=>{
+            Toast.fail("网络错误", 1);
+        })
+       
+ 
+  }
     render(){
         return(
             <div className="introduce_Box">
                 <div className="introduce_top">
-                        <img className="introduce_banner"  src={url} />
+               {this.state.headUrl &&
+                    <img className="introduce_banner"  src={this.state.headUrl} />
+                }
                         <div className="introduce_bottom">
                             <div className="introduce_con">
-                                <div className="introduce_con_c" onClick={()=>{console.log("拨打电话")}}>
+                                <div className="introduce_con_c" onClick={()=>{
+                                    
+                                    console.log(this.state.edtPhone);
+                                    if(this.state.edtPhone){
+                                        window.location.href = 'tel://' + this.state.edtPhone;
+                                    }
+                                    
+                                    }}>
                                             <img  src={phone} />
-                                            <span className="phoneNum">0755-9876</span>
+                                            <span className="phoneNum">
+                                            {this.state.edtPhone &&
+                                                this.state.edtPhone
+                                            }
+                                            </span>
                                 </div>
                                 <div className="introduce_line"></div>
                                 <div className="introduce_con_c">
                                             <img  src={address} />
-                                            <span className="intruduce_address">深圳市南山区按时大苏打大苏打撒旦</span>
+                                            <span className="intruduce_address">
+                                                {this.state.city+this.state.area+this.state.street+this.state.address}
+                                            </span>
                                             <img  src={navigation} onClick={()=>{console.log("去调用地图")}} />
                                 </div>
                             </div>
@@ -33,19 +101,19 @@ class App extends React.Component{
                 </div>
                 <div className="introduce_title">诊所介绍</div>
                 <div  className="clinic_introduce_content">
-                    恒信口腔医院是河源市批准注册的正规医疗机构 是广东省口腔医院的协作单位。河源口腔医院高起点 的规划，以口腔医院的标准配置设备，引进先进的代 表国际领先水平的牙科设备，是目前河源地区规模、 设备最为齐全的口腔医疗机构之一。营业面积
+                   {this.state.clinicIntroduce}
                 </div>
                 <div className="under_line"></div>
                 <div className="introduce_title2">诊所环境</div>
-                <div className="introduce_pic">
-                    <img src={url} />
-                </div>
-                <div className="introduce_pic">
-                    <img src={url} />
-                </div>
-                <div className="introduce_pic">
-                    <img src={url} />
-                </div>
+                {this.state.clinicEnvironmentList.map((index,item) =>
+     
+                    <div className="introduce_pic" key={item}>
+                        <img src={this.state.clinicEnvironmentList[item].fileUrl} />
+                    </div>
+ 
+                 )}
+                    
+                
             </div>
         )
     }

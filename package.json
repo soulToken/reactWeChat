@@ -13,6 +13,7 @@
     "react-scripts": "^1.1.4",
     "react-sticky": "^6.0.3",
     "react-svg": "^4.1.8",
+    "react-zmage": "^0.2.1",
     "redux": "^4.0.0"
   },
   "scripts": {
@@ -27,7 +28,7 @@
   },
   "proxy": {
     "/api": {
-      "target": "http://192.168.0.25:84",
+      "target": "http://192.168.0.24:84",
       "changeOrigin": true,
       "pathRewrite": {
         "^/api": ""
