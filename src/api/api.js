@@ -307,4 +307,25 @@ export const queryAppointmentList = (param="",obj={}) => {
         )
         return a
 }
+//16 取消预约
+export const modifyAppointmentStatus = (param="",obj={}) => {
+    obj={
+        "settingCode":"wxc_100000",
+        "openId":"oWZnu0x_7kPOPDyiXWRjPIfzO8vQ"
+    }
+    var headers=Object.assign( {
+        "Content-Type": "application/x-www-form-urlencoded",
+        // "Content-Type": "application/json",
+    },obj)  
+      var a= fetch(base+'/100care-wechat/userController/modifyAppointmentStatus',
+        {
+            method: "POST",
+            mode: "cors",
+            headers:headers,
+            body: param
+        }
+
+        )
+        return a
+}
 

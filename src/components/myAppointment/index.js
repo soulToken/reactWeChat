@@ -9,6 +9,7 @@ import url from '../../static/svg/make_an_appointment_hospital.svg'
 import {queryAppointmentList} from '../../api/api'
 import './index.css'
 import { Item } from '../../../node_modules/antd-mobile/lib/tab-bar';
+import {modifyAppointmentStatus} from '../../api/api'
 const alert = Modal.alert;
 function renderTabBar(props) {
   return (<Sticky>
@@ -37,89 +38,35 @@ class Fresher extends React.Component {
     this.state = {
       refreshing: true,
       down: false,
-      height: document.documentElement.clientHeight,
+      height: document.documentElement.clientHeight-94,
       data: [],
-    };
-    console.log(this.props.data)
-  }
-
-  componentDidMount() {
-    // console.log(ReactDOM.findDOMNode(this.ptr).offsetTop)
-    // const hei = this.state.height - ReactDOM.findDOMNode(this.ptr).offsetTop;
-
-    console.log(document.getElementById('fresh').offsetTop)
-    const hei = this.state.height-100;
-    setTimeout(() => this.setState({
-      height: hei,
-      data: genData(),
-    }), 0);
-  }
-
-  render() {
-    return (
-      <div>
-     
-      <PullToRefresh
-        id="fresh"
-        damping={60}
-        ref={el => this.ptr = el}
-        style={{
-          height: this.state.height,
-          overflow: 'auto',
-          WebkitOverflowScrolling:'touch'
-        }}
-        indicator={this.state.down ? {} : { deactivate: '上拉可以刷新' }}
-        direction={this.state.down ? 'down' : 'up'}
-        refreshing={this.state.refreshing}
-        onRefresh={() => {
-          debugger;
-          this.setState({ refreshing: true });
-          setTimeout(() => {
-            this.setState({ refreshing: false });
-          }, 1000);
-        }}
-      >
-        {this.state.data.map(i => (
-          <div key={i} style={{ textAlign: 'center', padding: 20 }}>
-            {this.state.down ? 'pull down' : 'pull up'} {i}
-          </div>
-        ))}
-      </PullToRefresh>
-    </div>);
-  }
-}
-
-
-class Fresher2 extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      refreshing: true,
-      down: false,
-      height: document.documentElement.clientHeight,
-      data: [],
+      show:false,
       queryAppointmentList:queryAppointmentList,
     };
     console.log(this.props.data)
   }
 
   componentDidMount() {
-    // console.log(ReactDOM.findDOMNode(this.ptr).offsetTop)
-    // const hei = this.state.height - ReactDOM.findDOMNode(this.ptr).offsetTop;
     this.getList()
   }
-  getList=(pos=0,count=5,status=1)=>{
+  getList=(pos=0,count=5,status=0)=>{
     var self=this;
+    Toast.loading('Loading...', 0, () => {
+      console.log('Load complete !!!');
+    });
     var param="position="+pos+"&count="+count+"&appointmentStatus="+status
-    const hei = this.state.height-100+6;
+    // const hei = this.state.height-94;
     this.state.queryAppointmentList(param).then(function(res){
       if (res.ok) {
         res.json().then((obj)=> {
             if(obj.resultCode==="1000"){ 
+                Toast.hide()
                 var newData=self.state.data.concat(obj.result);
                 self.setState({
                   data:newData,
-                  height: hei
+                  // height: hei
+                  refreshing:false,
+                  show:true
                 })
             }else{
                 Toast.hide()
@@ -139,6 +86,10 @@ class Fresher2 extends React.Component {
       { text: '确定', onPress: () => console.log('ok') },
     ])
   }
+  getNewList=()=>{
+    this.setState({ refreshing: true });
+    this.getList(this.state.data.length,5,0)
+  }
   render() {
     return (
       <div>
@@ -150,40 +101,204 @@ class Fresher2 extends React.Component {
         style={{
           height: this.state.height,
           overflow: 'auto',
-          WebkitOverflowScrolling:'touch'
+          // WebkitOverflowScrolling:'touch'
         }}
         indicator={this.state.down ? {} : { deactivate: '上拉可以刷新' }}
         direction={this.state.down ? 'down' : 'up'}
         refreshing={this.state.refreshing}
-        onRefresh={() => {
-         
-          this.setState({ refreshing: true });
-          setTimeout(() => {
-            this.setState({ refreshing: false });
-          }, 1000);
-        }}
+        onRefresh={this.getNewList.bind(this)}
       >
+
+      <div>
+
+           {this.state.data.length>0 ? (
+             <div>
         {this.state.data.map((item,index) => (
-          
+                
           <div key={index}  className="order_box">
                 <div className="order_detail">
                     <div className="order_detail_top">
                           <div className="order_detail_top_left">
-                          惠州市恒信口腔惠州分院
+                            {item.clinicName}
                           </div>
-                          <div className="order_detail_top_right" onClick={this.canCel.bind(this)}>取消预约</div>   
+                          {/* <div className="order_detail_top_right" onClick={this.canCel.bind(this)}>取消预约</div>    */}
                     </div>
                     <div className="order_detail_bottom" >
-                                <img src={url} className="order_detail_bottom_left" />
+                                <img src={item.headUrl} className="order_detail_bottom_left" />
                                 <div className="order_detail_bottom_right">
-                                      <div>科室：口腔科门诊</div>
-                                      <div>就诊人：张晓明</div>
-                                      <div>预约时间：2018-06-13 08:00</div>
+                                      <div>科室：{item.classifyStr}</div>
+                                      <div>就诊人：{item.nickName}</div>
+                                      <div>预约时间：{item.appointmentDate} {item.appointmentTime}</div>
                                 </div>
                     </div>
                 </div>
           </div>
         ))}
+        </div>
+      ) : (
+        <div>
+             {this.state.show  &&
+                <div  style={{textAlign:'center',marginTop:'50px'}}> 暂无数据</div>
+             }
+        </div>
+       
+
+       
+      )}  
+      </div>
+
+      </PullToRefresh>
+    </div>);
+  }
+}
+
+
+
+class Fresher2 extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      refreshing: true,
+      down: false,
+      height: document.documentElement.clientHeight-94,
+      data: [],
+      show:false,
+      id:null,
+      queryAppointmentList:queryAppointmentList,
+      modifyAppointmentStatus:modifyAppointmentStatus
+    };
+    console.log(this.props.data)
+  }
+
+  componentDidMount() {
+    this.getList()
+  }
+  changeStatus=(id)=>{
+    var self=this;
+    var param="id="+id+"&appointmentStatus="+4
+    this.state.modifyAppointmentStatus(param).then(function(res){
+      if (res.ok) {
+        res.json().then((obj)=> {
+            if(obj.resultCode==="1000"){ 
+              Toast.info('取消预约成功!!!', 1);
+              self.getList(0,5,1,1)
+            }else{
+                Toast.fail(obj.resultMsg, 1);
+            }
+        })
+
+    }
+    }).catch(function(){
+      Toast.hide()
+      Toast.fail("网络错误", 1);
+    })
+  }
+  getList=(pos=0,count=5,status=1,fresh)=>{
+    var self=this;
+    
+   
+    var param="position="+pos+"&count="+count+"&appointmentStatus="+status
+    // const hei = this.state.height-94;
+    this.state.queryAppointmentList(param).then(function(res){
+      if (res.ok) {
+        res.json().then((obj)=> {
+            if(obj.resultCode==="1000"){ 
+              Toast.hide()
+              if(fresh){
+                var newData=obj.result
+              }else{
+                var newData=self.state.data.concat(obj.result);
+              } 
+                self.setState({
+                  data:newData,
+                  // height: hei
+                  refreshing:false,
+                  show:true
+                })
+            }else{
+              Toast.hide()
+                Toast.fail(obj.resultMsg, 1);
+            }
+        })
+
+    }
+    }).catch(function(){
+      Toast.hide()
+      Toast.fail("网络错误", 1);
+    })
+  }
+  canCel=(id)=>{
+    var self=this;
+    alert('确定要取消预约？', '', [
+      { text: '取消', onPress: () =>{
+
+      }  },
+      { text: '确定', onPress: () =>{
+        self.changeStatus(id)
+      } },
+    ])
+  }
+  getNewList=()=>{
+    this.setState({ refreshing: true });
+    this.getList(this.state.data.length,5,1)
+  }
+  render() {
+    return (
+      <div>
+     
+      <PullToRefresh
+        id="fresh"
+        damping={60}
+        ref={el => this.ptr = el}
+        style={{
+          height: this.state.height,
+          overflow: 'auto',
+          // WebkitOverflowScrolling:'touch'
+        }}
+        indicator={this.state.down ? {} : { deactivate: '上拉可以刷新' }}
+        direction={this.state.down ? 'down' : 'up'}
+        refreshing={this.state.refreshing}
+        onRefresh={this.getNewList.bind(this)}
+      >
+
+      <div>
+
+           {this.state.data.length>0 ? (
+             <div>
+        {this.state.data.map((item,index) => (
+                
+          <div key={index}  className="order_box">
+                <div className="order_detail">
+                    <div className="order_detail_top">
+                          <div className="order_detail_top_left">
+                            {item.clinicName}
+                          </div>
+                          <div className="order_detail_top_right" onClick={this.canCel.bind(this,item.id)}>取消预约</div>   
+                    </div>
+                    <div className="order_detail_bottom" >
+                                <img src={item.headUrl} className="order_detail_bottom_left" />
+                                <div className="order_detail_bottom_right">
+                                      <div>科室：{item.classifyStr}</div>
+                                      <div>就诊人：{item.nickName}</div>
+                                      <div>预约时间：{item.appointmentDate} {item.appointmentTime}</div>
+                                </div>
+                    </div>
+                </div>
+          </div>
+        ))}
+        </div>
+      ) : (
+        <div>
+             {this.state.show  &&
+                <div  style={{textAlign:'center',marginTop:'50px'}}> 暂无数据</div>
+             }
+        </div>
+       
+
+       
+      )}  
+      </div>
+
       </PullToRefresh>
     </div>);
   }
@@ -219,10 +334,10 @@ const TabExample = () => (
           }
         >
         <div > 
-            <Fresher2  data={{good:1}}></Fresher2>
+            <Fresher2 ></Fresher2>
         </div>
           <div >
-          <Fresher2></Fresher2>
+          <Fresher></Fresher>
         </div>
         
         </Tabs>
