@@ -3,6 +3,7 @@ import { List, InputItem, Button,Toast } from 'antd-mobile';
 import './index.css'
 import phoneUrl from '../../static/svg/phone_phone.svg'
 import codeUrl from '../../static/svg/phone_verification.svg'
+import {getVerifyCode,verifyMobile} from '../../api/api'
 class App extends React.Component{
         constructor(props) {
             super(props);
@@ -11,7 +12,9 @@ class App extends React.Component{
         　　　　btnText: '获取验证码',
         　　　　timer: 60,
         　　　　discodeBtn: false,
-        　　　　clearInterval: false
+        　　　　clearInterval: false,
+                getVerifyCode:getVerifyCode,
+                verifyMobile:verifyMobile
             }
          
           }
@@ -30,32 +33,84 @@ class App extends React.Component{
         //     　　　　}
         //     　　}
         //     }
-            count = () => {
-                
-                var timer=this.state.timer
-               
-                let siv = setInterval(() => {
-                    this.setState({ timer: (timer--), btnText: timer+'s', discodeBtn: true }, () => {
-                        if (timer === 0) {
-                            clearInterval(siv);
-                            this.setState({ btnText: '重新发送',timer:60, discodeBtn: false })
-                        }
-                    });
-                }, 1000);
-                }
+        componentDidMount(){
+            
+        }
+        count = () => {
+            
+            var timer=this.state.timer
+            
+            let siv = setInterval(() => {
+                this.setState({ timer: (timer--), btnText: timer+'s', discodeBtn: true }, () => {
+                    if (timer === 0) {
+                        clearInterval(siv);
+                        this.setState({ btnText: '重新发送',timer:60, discodeBtn: false })
+                    }
+                });
+            }, 1000);
+            }
+        //获取验证码接口
+        toGetCode=(param)=>{
+            var self=this;
+            this.state.getVerifyCode(param).then(function(res){
+                if (res.ok) {
+                  res.json().then((obj)=> {
+                      if(obj.resultCode==="1000"){ 
+                          self.setState({
+                            remainpoint:obj.result.remainpoint
+                          })
+                            self.count()
 
+                      }else{
+                    
+                          Toast.fail(obj.resultMsg, 1);
+                      }
+                  })
+              }
+              }).catch(function(){
+                Toast.fail("网络错误", 1);
+              })
+        }
+        submit=()=>{
+            var self=this;
+            var param="mobile="+this.phoneNumber.state.value.replace(/ /g,'')+"&verifyCode="+this.codeNumber.state.value.replace(/ /g,'')
+            this.state.verifyMobile(param).then(function(res){
+                if (res.ok) {
+                  res.json().then((obj)=> {
+                      if(obj.resultCode==="1000"){ 
+                          
+                            self.props.history.push("/my")
+                      }else{
+                    
+                          Toast.fail(obj.resultMsg, 1);
+                      }
+                  })
+              }
+              }).catch(function(){
+                Toast.fail("网络错误", 1);
+              })
+        }
           //获取code 
           getCode=()=>{
                 if(this.state.btnText=="获取验证码"||this.state.btnText=="重新发送"){
-                    this.count()
+
+                    var value=this.phoneNumber.state.value.replace(/ /g,'');
+                    if(!value){
+                        Toast.info('请输入手机号!!!', 1);
+                        return 
+                    }
+                    var param="mobile="+value
+                    this.toGetCode(param)
+                  
                 }
                 
           }
           //去注册
           gotoBind=()=>{
-            Toast.success('成功', 1);
+              
+            this.submit()
 
-              console.log('电话号:'+this.phoneNumber.state.value.replace(/ /g,''),'验证码:'+this.codeNumber.state.value.replace(/ /g,''))
+            
           }
           render(){
               return (

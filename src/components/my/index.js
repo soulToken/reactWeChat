@@ -10,6 +10,8 @@ import nameUrl from '../../static/svg/personal_name.svg'
 import sexUrl from '../../static/svg/personal_sex.svg'
 import ageUrl from '../../static/svg/personal_age.svg'
 import phoneUrl from '../../static/svg/personal_phone.svg'
+import {getUserBaseinfo} from '../../api/api'
+import {modifyUserInfo} from '../../api/api'
 import './index.css'
 
 const prompt = Modal.prompt;
@@ -32,7 +34,7 @@ function formatDate(date) {
   const pad = n => n < 10 ? `0${n}` : n;
   const dateStr = `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}`;
   const timeStr = `${pad(date.getHours())}:${pad(date.getMinutes())}`;
-  return `${dateStr} ${timeStr}`;
+  return `${dateStr}`;
 }
 
 // If not using `List.Item` as children
@@ -82,39 +84,93 @@ class ListExample extends React.Component {
       dpValue: null,
       customChildValue: null,
       visible: false,
+      nickName:null,
+      headUrl:null,
+      getUserBaseinfo:getUserBaseinfo,
+      modifyUserInfo:modifyUserInfo,
     }
   }
-  changeName=() => {
-    prompt('', '请输入名字',
+  componentDidMount(){
+    this.getDetail()
+  }
+  getDetail=()=>{
+    var self=this;
+    var param=""
+    Toast.loading('Loading...', 0, () => {
+      console.log('Load complete !!!');
+    },false);
+    this.state.getUserBaseinfo(param).then(function(res){
+      if (res.ok) {
+        res.json().then((obj)=> {
+            if(obj.resultCode==="1000"){ 
+              Toast.hide()
+                 self.setState({
+                  nickName:obj.result.nickName,
+                  sex:obj.result.sex,
+                  birthday:obj.result.birthday,
+                  mobile:obj.result.mobile,
+                  headUrl:obj.result.headUrl
+                 })     
+                  window.sessionStorage.setItem("loginInfo",JSON.stringify(obj.result))
+            }else{
+                Toast.hide()
+                Toast.fail(obj.resultMsg, 1);
+            }
+        })
 
+    }
+    }).catch(function(){
+      Toast.hide()
+      Toast.fail("网络错误", 1);
+    })
+  }
+  changeMessage=(param,resolve)=>{
+    var self=this;
+    this.state.modifyUserInfo(param).then(function(res){
+      if (res.ok) {
+        res.json().then((obj)=> {
+            if(obj.resultCode==="1000"){ 
+                self.getDetail()
+                if(resolve){
+                  resolve()
+                }
+               
+            }else{
+              if(resolve){
+                resolve()
+              }
+                Toast.fail(obj.resultMsg, 1);
+            }
+        })
+    }
+    }).catch(function(){
+      Toast.fail("网络错误", 1);
+    })
+  }
+  changeName=() => {
+    var self=this;
+    prompt('', '请输入名字',
   [
     {
       text: '取消',
       onPress: value => new Promise((resolve) => {
-        Toast.info('onPress promise resolve', 1);
-        setTimeout(() => {
-          resolve();
-          console.log(`value:${value}`);
-        }, 1000);
+        resolve()
       }),
     },
     {
       text: '确定',
       onPress: value => new Promise((resolve, reject) => {
-        Toast.info('onPress promise reject', 1);
-        setTimeout(() => {
-          reject();
-          console.log(`value:${value}`);
-        }, 1000);
+        if(!value.trim()){
+          Toast.info('不可以输入空姓名 !!!', 1);
+          return 
+        }
+        const param="nickName="+value;
+        self.changeMessage(param,resolve)
       }),
     },
   ], 'default', null, ['请输入姓名'])
 }
 goBind=()=>{
-
-  Toast.loading('Loading...', 0, () => {
-    console.log('Load complete !!!');
-  },true);
   this.props.history.push('/bind')
 }
 chooseSex=(v)=>{
@@ -123,8 +179,15 @@ chooseSex=(v)=>{
       return item.value==v
     })[0].label
   }
-  
-  
+}
+changeSex=(v)=>{
+  var param="sex="+v[0]
+  this.changeMessage(param)
+}
+changeBirthday=(date)=>{
+  var newDate=formatDate(date)
+  var param="birthday="+newDate;
+  this.changeMessage(param)
 }
   render() {
     return (
@@ -133,45 +196,44 @@ chooseSex=(v)=>{
       <div style={{ position: 'absolute', bottom: '50px', top: '0', zIndex: '10',width:'100%' ,background:'#f5f5f5'}}>
 
         <div className="my_head_box">
-                <img className="head_url_center" src={heardUrl}/>  
+                <img className="head_url_center" src={this.state.headUrl}/>  
         </div>
 
          <List className="date-picker-list" style={{ backgroundColor: 'white',marginTop:'41px' }}>
             <Item
               thumb={nameUrl}
               arrow="horizontal"
-              extra={'郝文斌'}
+              extra={this.state.nickName}
               onClick={this.changeName.bind(this)}
             >姓名</Item>
              <Picker data={district} cols={1}  
                     className="forss"
                     value={[this.state.sex]}
-                    onChange={v =>this.setState({sex:v[0]})}
+                    onChange={this.changeSex.bind(this)}
                     onOk={v =>this.setState({sex:v[0]})}
                     extra={this.chooseSex(this.state.sex)}
             >
               <Item 
                thumb={sexUrl}
-             
-                extra={'女'}
               arrow="horizontal">性别</Item>
             </Picker>
             <DatePicker
               mode="date"
               title="选择日期"
-              extra="Optional"
+              extra="请选择"
               minDate={new Date("1900-1-1")}
               maxDate={this.state.time}
-              value={this.state.date}
-              onChange={date => this.setState({ date })}
+              value={new Date(this.state.birthday)}
+              onChange={this.changeBirthday.bind(this)}
             >
               <List.Item 
                thumb={ageUrl}
-              arrow="horizontal">年龄</List.Item>
+              arrow="horizontal">生日</List.Item>
             </DatePicker>
             <Item
               thumb={phoneUrl}
-              extra={'18838186419'}
+              extra={this.state.mobile||"去绑定"}
+              arrow="horizontal"
               onClick={this.goBind.bind(this)}
             >
               手机
