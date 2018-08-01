@@ -98,7 +98,7 @@ class ListExample extends React.Component {
     var param=""
     Toast.loading('Loading...', 0, () => {
       console.log('Load complete !!!');
-    },false);
+    });
     this.state.getUserBaseinfo(param).then(function(res){
       if (res.ok) {
         res.json().then((obj)=> {

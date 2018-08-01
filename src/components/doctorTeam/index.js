@@ -73,7 +73,7 @@ class App extends React.Component {
       this.genDataList()
   }
   //获取列表数据决口
-  genDataList = (pos=1,count=5,fresh) =>{
+  genDataList = (pos=0,count=5,fresh) =>{
     var self=this;
     const hei = this.state.height - ReactDOM.findDOMNode(this.lv).offsetTop;
     var param="position="+pos+"&count="+count

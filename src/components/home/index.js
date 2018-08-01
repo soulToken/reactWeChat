@@ -7,7 +7,7 @@ import { Route } from "react-router-dom";
 import ReactDOM from 'react-dom';
 import './index.css';
 import banner from '../../static/images/homepage_banner@3x.png';
-import { Flex, WhiteSpace } from 'antd-mobile';
+import { Flex, WhiteSpace ,Modal, List, Button,Toast} from 'antd-mobile';
 import ReactSVG from 'react-svg'
 import clinic from '../../static/svg/homepage_clinic.svg'
 import location from '../../static/svg/homepage_location.svg'
@@ -15,6 +15,7 @@ import doctor from '../../static/svg/hompage_doctor.svg'
 import activity from '../../static/svg/homepage_activity.svg'
 import wifi from '../../static/svg/homepage_wifi.svg'
 import mall from '../../static/svg/homepage_mall.svg'
+import {getClinicWIFI} from '../../api/api'
 import  {GetRequest} from '../../util/index'
 
 
@@ -36,6 +37,7 @@ const PlaceHolder = ({ className = '', ...restProps }) => (
       }else if(name=='诊所活动'){
         a.prop.history.push('/activity')
       }else if(name=='免费无线'){
+        debugger;
         console.log('免费无线')
       }else if(name=='诊所商城'){
         console.log('诊所商城')
@@ -69,12 +71,58 @@ class FlexExample  extends React.Component {
     super(props);
     this.state = {
       disabled: false,
-      GetRequest:GetRequest
+      GetRequest:GetRequest,
+      modal1: false,
+      getClinicWIFI:getClinicWIFI,
+      wifiImg:null,
     }
     console.log(this.state.GetRequest(this.props.prop.location.search))
   }
   componentDidMount(){
     // this.state.mock('',{settingCode:1010100010})
+  }
+  onClose = key => () => {
+    this.setState({
+      [key]: false,
+    });
+  }
+  wifi=()=>{
+    // this.setState({
+    //   modal1:true
+    // })
+    if(this.state.wifiImg){
+      this.setState({
+      modal1:true
+    })
+    }else{
+        this.getWifi()
+    }
+   
+  }
+  getWifi=()=>{
+    var self=this;
+    this.state.getClinicWIFI().then(function(res){
+      if (res.ok) {
+        res.json().then((obj)=> {
+            if(obj.resultCode==="1000"){ 
+              Toast.hide()
+              if(obj.result&&obj.result.wifiImg){
+                self.setState({
+                  wifiImg:obj.result.wifiImg,
+                  modal1:true
+                 })
+              }
+            }else{
+                Toast.hide()
+                Toast.fail(obj.resultMsg, 1);
+            }
+        })
+
+    }
+    }).catch(function(){
+      Toast.hide()
+      Toast.fail("网络错误", 1);
+    })
   }
   render(){
       return (
@@ -96,11 +144,27 @@ class FlexExample  extends React.Component {
           </Flex>
           <WhiteSpace></WhiteSpace>
           <Flex>
-            <Flex.Item><PlaceHolder prop={this.props.prop} url={wifi} name="免费无线" name2="免费无线"/></Flex.Item>
+            <Flex.Item><PlaceHolder prop={this.props.prop} url={wifi}  onClick={this.wifi.bind(this)} name="免费无线" name2="免费无线"/></Flex.Item>
             <Flex.Item>
                   <PlaceHolder prop={this.props.prop} url={mall} name="诊所商城" name2="诊所商城"/> 
             </Flex.Item>
           </Flex>
+          <Modal
+          visible={this.state.modal1}
+          transparent
+          maskClosable={false}
+          onClose={this.onClose('modal1')}
+          title="长按识别二维码"
+          footer={[{ text: 'Ok', onPress: () => { console.log('ok'); this.onClose('modal1')(); } }]}
+          wrapProps={{ onTouchStart: this.onWrapTouchStart }}
+        >
+          <div style={{ height: 140 }}>
+                <img style={{height:"100%"}} src={this.state.wifiImg} />
+          </div>
+        </Modal>
+
+
+
         </div>
         )
    }
@@ -165,7 +229,7 @@ class Lunbo extends React.Component {
             </Carousel>
           </WingBlank>
           <FlexExample prop={this.props}></FlexExample>
-
+            
         </div>
         <TabBarExample></TabBarExample>
       </div>

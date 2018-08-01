@@ -2,7 +2,8 @@ import React from 'react';
 import ReactDOM from 'react-dom'
 import './index.css'
 import Detail from './detail/index'
-
+import {getClinicActivityList} from '../../api/api'
+import {Toast} from 'antd-mobile'
 import { Route } from "react-router-dom";
 
 
@@ -32,16 +33,6 @@ const data = [
     id:3
   },
 ];
-const NUM_ROWS = 20;
-let pageIndex = 0;
-
-function genData(pIndex = 0) {
-  const dataArr = [];
-  for (let i = 0; i < NUM_ROWS; i++) {
-    dataArr.push(`row - ${(pIndex * NUM_ROWS) + i}`);
-  }
-  return dataArr;
-}
 
 class Demo extends React.Component {
   constructor(props) {
@@ -56,6 +47,8 @@ class Demo extends React.Component {
       isLoading: true,
       height: document.documentElement.clientHeight,
       useBodyScroll: true,
+      getClinicActivityList:getClinicActivityList,
+      data:[]
     };
   }
 
@@ -78,50 +71,87 @@ class Demo extends React.Component {
 
   componentDidMount() {
     const hei = this.state.height - ReactDOM.findDOMNode(this.lv).offsetTop;
-
-    setTimeout(() => {
-      this.rData = genData();
-      this.setState({
-        dataSource: this.state.dataSource.cloneWithRows(genData()),
-        height: hei,
-        refreshing: false,
-        isLoading: false,
-      });
-    }, 1500);
+    this.getList()
+    // setTimeout(() => {
+    //   this.rData = genData();
+    //   this.setState({
+    //     dataSource: this.state.dataSource.cloneWithRows(genData()),
+    //     height: hei,
+    //     refreshing: false,
+    //     isLoading: false,
+    //   });
+    // }, 1500);
   }
+  getList=(pos=0,count=5,fresh)=>{
+    var self=this;
+    const hei = this.state.height - ReactDOM.findDOMNode(this.lv).offsetTop;
+    var param="position="+pos+"&count="+count
+    this.state.getClinicActivityList(param).then(function(res){
+      if (res.ok) {
+        res.json().then((obj)=> {
+            if(obj.resultCode==="1000"){ 
+              if(fresh){
+                var newData=obj.result;
+              }else{
+                var newData=self.state.data.concat(obj.result);
+              }
+                self.setState({
+                  data:newData,
+                  dataSource: self.state.dataSource.cloneWithRows(newData),
+                   height: hei,
+                   refreshing: false,
+                   isLoading: false,
+                })
+            }else{
+                Toast.hide()
+                Toast.fail(obj.resultMsg, 1);
+            }
+        })
 
+    }
+    }).catch(function(){
+      Toast.hide()
+      Toast.fail("网络错误", 1);
+    })
+  }
   onRefresh = () => {
     this.setState({ refreshing: true, isLoading: true });
     // simulate initial Ajax
-    setTimeout(() => {
-      this.rData = genData();
-      this.setState({
-        dataSource: this.state.dataSource.cloneWithRows(this.rData),
-        refreshing: false,
-        isLoading: false,
-      });
-    }, 600);
+    this.getList(1,5,1)
   };
 
   onEndReached = (event) => {
     // load new data
     // hasMore: from backend data, indicates whether it is the last page, here is false
+    console.log(this.state.data.length)
     if (this.state.isLoading && !this.state.hasMore) {
       return;
     }
-    console.log('reach end', event);
-    this.setState({ isLoading: true });
-    setTimeout(() => {
-      this.rData = [...this.rData, ...genData(++pageIndex)];
-      this.setState({
-        dataSource: this.state.dataSource.cloneWithRows(this.rData),
-        isLoading: false,
-      });
-    }, 1000);
+    this.getList(this.state.data.length)
   };
   getClick=(id)=>{
         this.props.history.push('/activity/'+id)
   }
+  _renderRow(row, sectionId, rowId) {
+    return (
+      <div key={row.id}
+          style={{
+            paddingBottom:'15px',
+            backgroundColor: 'white',
+          }}
+        >
+          <div style={{ textAlign:'center',paddingTop:'20px',paddingBottom:'20px', color: '#888', fontSize: '18px', borderBottom: '1px solid #ddd' }}>
+            {row.activityDesc}
+          </div>
+          <div style={{ display: '-webkit-box', display: 'flex', padding: '15px' }}    onClick={this.getClick.bind(this,row.id)}>
+            <img style={{ height: '200px', width:'100%' }} src={row.activityPicture} alt="" />
+          </div>
+        </div>
+    )
+  }
+
+
+
 
   render() {
     const separator = (sectionID, rowID) => (
@@ -162,11 +192,13 @@ class Demo extends React.Component {
         key={this.state.useBodyScroll ? '0' : '1'}
         ref={el => this.lv = el}
         dataSource={this.state.dataSource}
-     
+        onEndReachedThreshold={150}
         renderFooter={() => (<div style={{ padding: 30, textAlign: 'center' }}>
-          {this.state.isLoading ? 'Loading...' : 'Loaded'}
+          {this.state.isLoading ? '加载中...' : '无更多数据'}
         </div>)}
-        renderRow={row}
+         renderRow={
+          this._renderRow.bind(this)
+        }
         renderSeparator={separator}
         useBodyScroll={this.state.useBodyScroll}
         style={this.state.useBodyScroll ? {} : {

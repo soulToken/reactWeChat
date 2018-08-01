@@ -40,8 +40,6 @@ export const getDateArr=function(dayNum){
             strDate = "0" + strDate;
         }
         var currentdate = date.getFullYear() + seperator1 + month + seperator1 + strDate
-                + " " + date.getHours() + seperator2 + date.getMinutes()
-                + seperator2 + date.getSeconds();
         dayArr.push( {
             valye:dateArr[date.getDay()],
             label:(date.getMonth()+1)+'-'+date.getDate(),

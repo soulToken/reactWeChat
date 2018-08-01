@@ -7,12 +7,31 @@
 // }
 import React from 'react'
 import {Route ,Redirect } from 'react-router-dom';
-export default function({component:Component,...rest}){
-    return <Route {...rest} render={(props)=>
-            localStorage.getItem('login')?<Component/>:
-            <Redirect to={{
-                pathname:"/",
-                state:{from:props.location.pathname}
-            }}></Redirect>
-    }></Route>
-}
+// export default function({component:Component,...rest}){
+//     return <Route {...rest} render={(props)=>
+//             localStorage.getItem('login')?<Component/>:
+//             <Redirect to={{
+//                 pathname:"/",
+//                 state:{from:props.location.pathname}
+//             }}></Redirect>
+//     }></Route>
+// }
+
+
+class App extends React.Component {
+    constructor(props) {
+        super(props);
+        //在这里 做判断 如果 路径后面有参数  则  去请求 个人信息用户接口 并且 全局保存  诊所id 跟 openid
+    }  
+       
+        render() {
+                return (
+                    <div>
+                       <Route component={this.props.component}></Route>
+                    </div>
+                )
+        }
+           
+        
+    }
+    export default App

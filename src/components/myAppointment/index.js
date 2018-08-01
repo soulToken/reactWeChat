@@ -4,9 +4,11 @@ import ReactDOM from 'react-dom'
 import { Tabs, WhiteSpace } from 'antd-mobile';
 import { StickyContainer, Sticky } from 'react-sticky';
 import TabBarExample from '../tooBar/tooBar'
-import { PullToRefresh, Button ,Modal} from 'antd-mobile';
+import { PullToRefresh, Button ,Modal,Toast} from 'antd-mobile';
 import url from '../../static/svg/make_an_appointment_hospital.svg'
+import {queryAppointmentList} from '../../api/api'
 import './index.css'
+import { Item } from '../../../node_modules/antd-mobile/lib/tab-bar';
 const alert = Modal.alert;
 function renderTabBar(props) {
   return (<Sticky>
@@ -96,6 +98,7 @@ class Fresher2 extends React.Component {
       down: false,
       height: document.documentElement.clientHeight,
       data: [],
+      queryAppointmentList:queryAppointmentList,
     };
     console.log(this.props.data)
   }
@@ -103,13 +106,32 @@ class Fresher2 extends React.Component {
   componentDidMount() {
     // console.log(ReactDOM.findDOMNode(this.ptr).offsetTop)
     // const hei = this.state.height - ReactDOM.findDOMNode(this.ptr).offsetTop;
-
-    console.log(document.getElementById('fresh').offsetTop)
+    this.getList()
+  }
+  getList=(pos=0,count=5,status=1)=>{
+    var self=this;
+    var param="position="+pos+"&count="+count+"&appointmentStatus="+status
     const hei = this.state.height-100+6;
-    setTimeout(() => this.setState({
-      height: hei,
-      data: genData(),
-    }), 0);
+    this.state.queryAppointmentList(param).then(function(res){
+      if (res.ok) {
+        res.json().then((obj)=> {
+            if(obj.resultCode==="1000"){ 
+                var newData=self.state.data.concat(obj.result);
+                self.setState({
+                  data:newData,
+                  height: hei
+                })
+            }else{
+                Toast.hide()
+                Toast.fail(obj.resultMsg, 1);
+            }
+        })
+
+    }
+    }).catch(function(){
+      Toast.hide()
+      Toast.fail("网络错误", 1);
+    })
   }
   canCel=()=>{
     alert('确定要取消预约？', '', [
@@ -141,9 +163,9 @@ class Fresher2 extends React.Component {
           }, 1000);
         }}
       >
-        {this.state.data.map(i => (
+        {this.state.data.map((item,index) => (
           
-          <div key={i}  className="order_box">
+          <div key={index}  className="order_box">
                 <div className="order_detail">
                     <div className="order_detail_top">
                           <div className="order_detail_top_left">
@@ -178,8 +200,6 @@ class Fresher2 extends React.Component {
 
 
 const TabExample = () => (
-
-
   <div>
     <div style={{ position: 'absolute', width: '100%', bottom: '50px', top: '0', zIndex: '10', overflow: 'auto',background:'#f5f5f5' }}>
       <WhiteSpace />

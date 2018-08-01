@@ -255,6 +255,12 @@ class BasicInputExample extends React.Component {
       Toast.fail("网络错误", 1);
     })
   }
+  success=()=>{
+    this.setState({
+      modal2:false
+    })
+    this.props.history.replace("/")
+  }
   render() {
     const { getFieldProps } = this.props.form;
     const district=[{
@@ -397,7 +403,7 @@ class BasicInputExample extends React.Component {
                   {this.state.currentChooseTime}
                   </div>
             </div>
-            <Button type="primary" onClick={this.onClose('modal2')}   style={{marginBottom:'30px'}}>确定</Button>
+            <Button type="primary" onClick={this.success.bind(this)}   style={{marginBottom:'30px'}}>确定</Button>
           </List>
         </Modal>
 

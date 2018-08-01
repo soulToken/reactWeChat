@@ -120,7 +120,7 @@ class App extends React.Component {
     )
   }
   //列表接口
-  getList=(pos=1,count=5,fresh)=>{
+  getList=(pos=0,count=5,fresh)=>{
     var self=this;
     const hei = this.state.height - ReactDOM.findDOMNode(this.lv).offsetTop;
     var param="position="+pos+"&count="+count

@@ -223,3 +223,88 @@ export const subscriberAppointmentInfo = (param="",obj={}) => {
         )
         return a
 }
+//12 wifi接口
+export const getClinicWIFI = (param="",obj={}) => {
+    obj={
+        "settingCode":"wxc_100000",
+        "openId":"oWZnu0x_7kPOPDyiXWRjPIfzO8vQ"
+    }
+    var headers=Object.assign( {
+        "Content-Type": "application/x-www-form-urlencoded",
+        // "Content-Type": "application/json",
+    },obj)  
+      var a= fetch(base+'/100care-wechat/wechatOfficialController/getClinicWIFI',
+        {
+            method: "POST",
+            mode: "cors",
+            headers:headers,
+            body: param
+        }
+
+        )
+        return a
+}
+//13 活动列表
+export const getClinicActivityList = (param="",obj={}) => {
+    obj={
+        "settingCode":"wxc_100000",
+        "openId":"oWZnu0x_7kPOPDyiXWRjPIfzO8vQ"
+    }
+    var headers=Object.assign( {
+        "Content-Type": "application/x-www-form-urlencoded",
+        // "Content-Type": "application/json",
+    },obj)  
+      var a= fetch(base+'/100care-wechat/clinicController/wechat/getClinicActivityList',
+        {
+            method: "POST",
+            mode: "cors",
+            headers:headers,
+            body: param
+        }
+
+        )
+        return a
+}
+//14 活动详情
+export const getClinicActivityDetail = (param="",obj={}) => {
+    obj={
+        "settingCode":"wxc_100000",
+        "openId":"oWZnu0x_7kPOPDyiXWRjPIfzO8vQ"
+    }
+    var headers=Object.assign( {
+        "Content-Type": "application/x-www-form-urlencoded",
+        // "Content-Type": "application/json",
+    },obj)  
+      var a= fetch(base+'/100care-wechat/clinicController/wechat/getClinicActivityDetail',
+        {
+            method: "POST",
+            mode: "cors",
+            headers:headers,
+            body: param
+        }
+
+        )
+        return a
+}
+//15 就诊列表
+export const queryAppointmentList = (param="",obj={}) => {
+    obj={
+        "settingCode":"wxc_100000",
+        "openId":"oWZnu0x_7kPOPDyiXWRjPIfzO8vQ"
+    }
+    var headers=Object.assign( {
+        "Content-Type": "application/x-www-form-urlencoded",
+        // "Content-Type": "application/json",
+    },obj)  
+      var a= fetch(base+'/100care-wechat/userController/queryAppointmentList',
+        {
+            method: "POST",
+            mode: "cors",
+            headers:headers,
+            body: param
+        }
+
+        )
+        return a
+}
+
