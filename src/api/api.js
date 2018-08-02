@@ -328,4 +328,47 @@ export const modifyAppointmentStatus = (param="",obj={}) => {
         )
         return a
 }
+//17 轮播图
+export const getClinicBanner = (param="",obj={}) => {
+    obj={
+        "settingCode":"wxc_100000",
+        "openId":"oWZnu0x_7kPOPDyiXWRjPIfzO8vQ"
+    }
+    var headers=Object.assign( {
+        "Content-Type": "application/x-www-form-urlencoded",
+        // "Content-Type": "application/json",
+    },obj)  
+      var a= fetch(base+'/100care-wechat/clinicController/wechat/getClinicBanner',
+        {
+            method: "POST",
+            mode: "cors",
+            headers:headers,
+            body: param
+        }
+
+        )
+        return a
+}
+
+//18 与微信授权
+export const getSignature4Js = (param="",obj={}) => {
+    obj={
+        "settingCode":"wxc_100000",
+        "openId":"oWZnu0x_7kPOPDyiXWRjPIfzO8vQ"
+    }
+    var headers=Object.assign( {
+        "Content-Type": "application/x-www-form-urlencoded",
+        // "Content-Type": "application/json",
+    },obj)  
+      var a= fetch(base+'/100care-wechat/wechatOfficialController/getSignature4Js',
+        {
+            method: "POST",
+            mode: "cors",
+            headers:headers,
+            body: param
+        }
+
+        )
+        return a
+}
 

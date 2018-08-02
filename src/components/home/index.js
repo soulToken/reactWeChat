@@ -15,7 +15,7 @@ import doctor from '../../static/svg/hompage_doctor.svg'
 import activity from '../../static/svg/homepage_activity.svg'
 import wifi from '../../static/svg/homepage_wifi.svg'
 import mall from '../../static/svg/homepage_mall.svg'
-import {getClinicWIFI} from '../../api/api'
+import {getClinicWIFI,getClinicBanner,getSignature4Js} from '../../api/api'
 import  {GetRequest} from '../../util/index'
 
 
@@ -25,7 +25,7 @@ const PlaceHolder = ({ className = '', ...restProps }) => (
       const name=e.currentTarget.getAttribute('name2');
       //根据不同情况跳转到 不同路由
       if(name=='预约'){
-        a.prop.history.push('/onlineBook')
+        // a.prop.history.push('/onlineBook')
       }else if(name=='诊所介绍'){
         a.prop.history.push('/clinicIntroduce')
       }else if(name=='诊所地址'){
@@ -37,7 +37,6 @@ const PlaceHolder = ({ className = '', ...restProps }) => (
       }else if(name=='诊所活动'){
         a.prop.history.push('/activity')
       }else if(name=='免费无线'){
-        debugger;
         console.log('免费无线')
       }else if(name=='诊所商城'){
         console.log('诊所商城')
@@ -74,6 +73,7 @@ class FlexExample  extends React.Component {
       GetRequest:GetRequest,
       modal1: false,
       getClinicWIFI:getClinicWIFI,
+      getSignature4Js:getSignature4Js,
       wifiImg:null,
     }
     console.log(this.state.GetRequest(this.props.prop.location.search))
@@ -124,14 +124,43 @@ class FlexExample  extends React.Component {
       Toast.fail("网络错误", 1);
     })
   }
+  getMap=()=>{
+    var self=this;
+    this.state.getSignature4Js().then(function(res){
+      if (res.ok) {
+        res.json().then((obj)=> {
+            if(obj.resultCode==="1000"){ 
+             debugger;
+              
+            }else{
+                Toast.hide()
+                Toast.fail(obj.resultMsg, 1);
+            }
+        })
+
+    }
+    }).catch(function(){
+      Toast.hide()
+      Toast.fail("网络错误", 1);
+    })
+  }
+  //判断去绑定还是去 预约
+  bindOrYuyue=()=>{
+    var loginInfo=JSON.parse(sessionStorage.getItem("loginInfo")) 
+        if(loginInfo&&loginInfo.mobile){
+          this.props.prop.history.push('/onlineBook')
+        }else{
+          this.props.prop.history.push('/bind')
+        }
+  }
   render(){
       return (
         <div className="flex-container" style={{marginTop:'15px'}}>
           <Flex>
-            <Flex.Item><PlaceHolder prop={this.props.prop} className="good" name=" " name2="预约" /></Flex.Item>
+            <Flex.Item><PlaceHolder prop={this.props.prop} onClick={this.bindOrYuyue.bind(this)} className="good" name=" " name2="预约" /></Flex.Item>
             <Flex.Item>
                   <PlaceHolder prop={this.props.prop}  url={clinic} name="诊所介绍"  name2="诊所介绍"/>
-                  <PlaceHolder prop={this.props.prop}  url={location} name="诊所地址" name2="诊所地址" /> 
+                  <PlaceHolder prop={this.props.prop}   onClick={this.getMap.bind(this)}  url={location} name="诊所地址" name2="诊所地址" /> 
             </Flex.Item>
           </Flex>
           <WhiteSpace style={{marginBottom:'5px'}}></WhiteSpace>
@@ -181,18 +210,40 @@ class Lunbo extends React.Component {
       disabled: false,
       match: this.props.match.path,
       history: this.props.history,
-      data: ['1', '2', '3'],
+      data: [],
       imgHeight: 176,
+      getClinicBanner:getClinicBanner
     }
   }
   
   componentDidMount() {
     // simulate img loading
-    setTimeout(() => {
-      this.setState({
-        data: ['AiyWuByWklrrUDlFignR', 'TekJlZRVCjLFexlOCuWn', 'IJOtIlfsYdTyaDTRVrLI'],
-      });
-    }, 100);
+    this.getBanner()
+   
+  }
+  getBanner=()=>{
+    var self=this;
+    var param="pageType=1"
+    this.state.getClinicBanner(param).then(function(res){
+      if (res.ok) {
+        res.json().then((obj)=> {
+            if(obj.resultCode==="1000"){ 
+              Toast.hide()
+                self.setState({
+                  data:obj.result
+                 })
+              
+            }else{
+                Toast.hide()
+                Toast.fail(obj.resultMsg, 1);
+            }
+        })
+
+    }
+    }).catch(function(){
+      Toast.hide()
+      Toast.fail("网络错误", 1);
+    })
   }
   render() {
     return (
@@ -209,13 +260,13 @@ class Lunbo extends React.Component {
             >
               {this.state.data.map((val,index) => (
                 <div
-                  key={val}
+                  key={index}
                  
                   // href="http://www.alipay.com"
                   style={{ display: 'inline-block', width: '100%', height: this.state.imgHeight }}
                 >
                   <img
-                    src={banner}
+                    src={val.bannerUrl}
                     alt={index}
                     style={{ width: '100%', verticalAlign: 'top' }}
                     onLoad={() => {

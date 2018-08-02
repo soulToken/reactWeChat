@@ -5,7 +5,7 @@ import { Route } from "react-router-dom";
 import { PullToRefresh, ListView, Button ,Toast} from 'antd-mobile';
 import bannerUrl from '../../static/images/homepage_banner@3x.png';
 import Topic from './detail/index';
-import {getClinicServerIteamList} from '../../api/api';
+import {getClinicServerIteamList,getClinicBanner} from '../../api/api';
 import './index.css'
 
 
@@ -39,8 +39,10 @@ class App extends React.Component {
       refreshing: true,
       isLoading: true,
       data:[],
+      bannerData:null,
       getClinicServerIteamList:getClinicServerIteamList,
       height: document.documentElement.clientHeight,
+      getClinicBanner:getClinicBanner,
       useBodyScroll: true,
     };
   }
@@ -53,7 +55,9 @@ class App extends React.Component {
   }
 
   componentDidMount() {
+    this.getBanner()
     this.getList()
+    
   // this.setState({
   //   data:  [
   //       {
@@ -118,6 +122,30 @@ class App extends React.Component {
     </div>
         
     )
+  }
+
+  getBanner=()=>{
+    var self=this;
+    var param="pageType=2"
+    this.state.getClinicBanner(param).then(function(res){
+      if (res.ok) {
+        res.json().then((obj)=> {
+            if(obj.resultCode==="1000"){ 
+              Toast.hide()
+                self.setState({
+                  bannerData:obj.result[0].bannerUrl
+                 })
+            }else{
+                Toast.hide()
+                Toast.fail(obj.resultMsg, 1);
+            }
+        })
+
+    }
+    }).catch(function(){
+      Toast.hide()
+      Toast.fail("网络错误", 1);
+    })
   }
   //列表接口
   getList=(pos=0,count=5,fresh)=>{
@@ -231,7 +259,7 @@ class App extends React.Component {
         key={this.state.useBodyScroll ? '0' : '1'}
         ref={el => this.lv = el}
         dataSource={this.state.dataSource}
-        renderHeader={() => <div  style={{height:'228px',width:'100%'}}><img style={{height:'100%',width:'100%'}} src={bannerUrl}/></div>}
+        renderHeader={() => <div  style={{height:'228px',width:'100%'}}><img style={{height:'100%',width:'100%'}} src={this.state.bannerData}/></div>}
         renderFooter={() => (<div style={{ padding: 30, textAlign: 'center' }}>
           {this.state.isLoading ? '加载中...' : '无更多数据'}
         </div>)}

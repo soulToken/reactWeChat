@@ -91,6 +91,7 @@ class ListExample extends React.Component {
     }
   }
   componentDidMount(){
+    console.log(minDate,new Date("1900-1-1"),this.state.time)
     this.getDetail()
   }
   getDetail=()=>{
@@ -221,7 +222,7 @@ changeBirthday=(date)=>{
               mode="date"
               title="选择日期"
               extra="请选择"
-              minDate={new Date("1900-1-1")}
+              minDate={new Date("1900-01-01")}
               maxDate={this.state.time}
               value={new Date(this.state.birthday)}
               onChange={this.changeBirthday.bind(this)}
