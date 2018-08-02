@@ -28,7 +28,7 @@
   },
   "proxy": {
     "/api": {
-      "target":"https://clinic.100care.cn",
+      "target":"http://clinic.100care.cn",
       "changeOrigin": true,
       "pathRewrite": {
         "^/api": ""

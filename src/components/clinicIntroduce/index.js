@@ -6,7 +6,7 @@ import address from '../../static/svg/clinic_introduction_address.svg'
 import navigation from '../../static/svg/clinic_introduction_navigation.svg'
 
 import { Toast } from 'antd-mobile';
-import {getClinicBaseinfo} from '../../api/api'
+import {getClinicBaseinfo,getSignature4Js} from '../../api/api'
 //图片放大组件
 import Zmage from 'react-zmage'
 
@@ -16,6 +16,7 @@ class App extends React.Component{
       super(props);
         this.state={
             getClinicBaseinfo:getClinicBaseinfo,
+            getSignature4Js:getSignature4Js,
             obj:null,
             headUrl:'',
             show:false,
@@ -25,7 +26,10 @@ class App extends React.Component{
             street:null,
             address:null,
             clinicIntroduce:null,
-            clinicEnvironmentList:[]
+            clinicEnvironmentList:[],
+            lat:null,
+            lon:null,
+            clinicName:null
         }
     }
   componentDidMount() {
@@ -48,6 +52,9 @@ class App extends React.Component{
                                 address:obj.result.address,
                                 clinicIntroduce:obj.result.clinicIntroduce,
                                 clinicEnvironmentList:obj.result.clinicEnvironmentList,
+                                lat:obj.result.lat,
+                                clinicName:obj.result.clinicName,
+                                lon:obj.result.lon,
                                 show:true
         
                             })
@@ -65,6 +72,82 @@ class App extends React.Component{
         })
        
  
+  }
+//打开地图
+getMap=()=>{
+    var self=this;
+    this.state.getSignature4Js().then(function(res){
+      if (res.ok) {
+        res.json().then((obj)=> {
+            if(obj.resultCode==="1000"){ 
+                if(obj.result){
+                      // console.log()
+              window.wx.config({
+                debug : false,
+                appId : obj.result.appId,
+                timestamp : obj.result.timestamp,
+                nonceStr : obj.result.noncestr,
+                signature : obj.result.signature,
+                jsApiList : [ 'checkJsApi', 'onMenuShareTimeline',
+                        'onMenuShareAppMessage', 'getLocation', 'openLocation',
+                        'hideOptionMenu' ]
+            });
+            window.wx.ready(function() {
+                // 1 判断当前版本是否支持指定 JS 接口，支持批量判断
+                window.wx.checkJsApi({
+                    jsApiList : [ 'getNetworkType', 'previewImage','openLocation','getLocation' ],
+                    success : function(res) {
+                        // 以键值对的形式返回，可用的api值true，不可用为false
+                        // 如：{"checkResult":{"chooseImage":true},"errMsg":"checkJsApi:ok"}
+                    }
+                });
+                window.wx.hideOptionMenu();
+                // 2. 分享接口
+                window.wx.getLocation({
+                    type : 'gcj02', // 默认为wgs84的gps坐标，如果要返回直接给openLocation用的火星坐标，可传入'gcj02'
+                    success : function(res) {
+                        // alert(JSON.stringify(res));
+                        var latitude = res.latitude; // 纬度，浮点数，范围为90 ~ -90
+                        // $("#latitude").val(latitude);
+                        var longitude = res.longitude; // 经度，浮点数，范围为180 ~ -180。
+                        // $("#longitude").val(longitude);
+                        var speed = res.speed; // 速度，以米/每秒计
+                        // $("#speed").val(speed);
+                        var accuracy = res.accuracy; // 位置精度
+                        // alert(latitude,longitude)
+                        // $("#accuracy").val(accuracy);
+                    },
+                    cancel : function(res) {
+                        alert('用户拒绝授权获取地理位置');
+                    }
+                });
+                window.wx.openLocation({
+                  latitude: self.state.lat, // 纬度，浮点数，范围为90 ~ -90
+                  longitude: self.state.lon, // 经度，浮点数，范围为180 ~ -180。
+                  name: self.state.clinicName, // 位置名
+                  address: '', // 地址详情说明
+                  scale: 15, // 地图缩放级别,整形值,范围从1~28。默认为最大
+                  infoUrl: '' // 在查看位置界面底部显示的超链接,可点击跳转
+                  });
+              })    
+              window.wx.error(function(res){
+                // alert(res)
+                }); 
+                }
+            
+            }else{
+                Toast.hide()
+                Toast.fail(obj.resultMsg, 1);
+            }
+        })
+        
+      
+
+    }
+    }).catch(function(){
+      Toast.hide()
+      Toast.fail("网络错误", 1);
+    })
   }
     render(){
         return(
@@ -103,7 +186,7 @@ class App extends React.Component{
                                             <span className="intruduce_address">
                                                 {this.state.city+this.state.area+this.state.street+this.state.address}
                                             </span>
-                                            <img  src={navigation} onClick={()=>{console.log("去调用地图")}} />
+                                            <img  src={navigation} onClick={this.getMap.bind(this)} />
                                 </div>
                             </div>
                         </div>

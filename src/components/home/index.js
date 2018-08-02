@@ -15,7 +15,7 @@ import doctor from '../../static/svg/hompage_doctor.svg'
 import activity from '../../static/svg/homepage_activity.svg'
 import wifi from '../../static/svg/homepage_wifi.svg'
 import mall from '../../static/svg/homepage_mall.svg'
-import {getClinicWIFI,getClinicBanner,getSignature4Js} from '../../api/api'
+import {getClinicWIFI,getClinicBanner,getSignature4Js,getClinicBaseinfo} from '../../api/api'
 import  {GetRequest} from '../../util/index'
 
 
@@ -74,8 +74,12 @@ class FlexExample  extends React.Component {
       modal1: false,
       getClinicWIFI:getClinicWIFI,
       getSignature4Js:getSignature4Js,
+      getClinicBaseinfo:getClinicBaseinfo,
       wifiImg:null,
+      lat:null,
+      lon:null,
     }
+    
     console.log(this.state.GetRequest(this.props.prop.location.search))
   }
   componentDidMount(){
@@ -85,6 +89,33 @@ class FlexExample  extends React.Component {
     this.setState({
       [key]: false,
     });
+  }
+  getPosition=()=>{
+    var self=this;
+    this.state.getClinicBaseinfo().then((res)=>{
+      if (res.ok) {
+          res.json().then((obj)=> {
+              if(obj.resultCode==="1000"){
+                      Toast.hide()
+                      self.setState({
+                        lat:obj.result.lat,
+                        lon:obj.result.lon
+                      })
+                      self.getMap(obj.result.lat,obj.result.lon,obj.result.clinicName)
+
+              }else{
+                  Toast.fail(obj.resultCode, 1);
+              }
+             
+  
+          })
+  
+      }
+  }
+  ).catch((res)=>{
+      Toast.fail("网络错误", 1);
+  })
+ 
   }
   wifi=()=>{
     // this.setState({
@@ -124,19 +155,73 @@ class FlexExample  extends React.Component {
       Toast.fail("网络错误", 1);
     })
   }
-  getMap=()=>{
+  getMap=(lat,lon,name)=>{
     var self=this;
     this.state.getSignature4Js().then(function(res){
       if (res.ok) {
         res.json().then((obj)=> {
             if(obj.resultCode==="1000"){ 
-             debugger;
-              
+              // console.log()
+              if(obj.result){
+                window.wx.config({
+                  debug : false,
+                  appId : obj.result.appId,
+                  timestamp : obj.result.timestamp,
+                  nonceStr : obj.result.noncestr,
+                  signature : obj.result.signature,
+                  jsApiList : [ 'checkJsApi', 'onMenuShareTimeline',
+                          'onMenuShareAppMessage', 'getLocation', 'openLocation',
+                          'hideOptionMenu' ]
+              });
+              window.wx.ready(function() {
+                  // 1 判断当前版本是否支持指定 JS 接口，支持批量判断
+                  window.wx.checkJsApi({
+                      jsApiList : [ 'getNetworkType', 'previewImage','openLocation','getLocation' ],
+                      success : function(res) {
+                          // 以键值对的形式返回，可用的api值true，不可用为false
+                          // 如：{"checkResult":{"chooseImage":true},"errMsg":"checkJsApi:ok"}
+                      }
+                  });
+                  window.wx.hideOptionMenu();
+                  // 2. 分享接口
+                  window.wx.getLocation({
+                      type : 'gcj02', // 默认为wgs84的gps坐标，如果要返回直接给openLocation用的火星坐标，可传入'gcj02'
+                      success : function(res) {
+                          // alert(JSON.stringify(res));
+                          var latitude = res.latitude; // 纬度，浮点数，范围为90 ~ -90
+                          // $("#latitude").val(latitude);
+                          var longitude = res.longitude; // 经度，浮点数，范围为180 ~ -180。
+                          // $("#longitude").val(longitude);
+                          var speed = res.speed; // 速度，以米/每秒计
+                          // $("#speed").val(speed);
+                          var accuracy = res.accuracy; // 位置精度
+                          // alert(latitude,longitude)
+                          // $("#accuracy").val(accuracy);
+                      },
+                      cancel : function(res) {
+                          alert('用户拒绝授权获取地理位置');
+                      }
+                  });
+                  window.wx.openLocation({
+                    latitude: lat, // 纬度，浮点数，范围为90 ~ -90
+                    longitude: lon, // 经度，浮点数，范围为180 ~ -180。
+                    name: name, // 位置名
+                    address: '', // 地址详情说明
+                    scale: 15, // 地图缩放级别,整形值,范围从1~28。默认为最大
+                    infoUrl: '' // 在查看位置界面底部显示的超链接,可点击跳转
+                    });
+                })
+                  window.wx.error(function(res){
+                      // alert(res)
+                  });
+              }
             }else{
                 Toast.hide()
                 Toast.fail(obj.resultMsg, 1);
             }
         })
+     
+      
 
     }
     }).catch(function(){
@@ -160,7 +245,7 @@ class FlexExample  extends React.Component {
             <Flex.Item><PlaceHolder prop={this.props.prop} onClick={this.bindOrYuyue.bind(this)} className="good" name=" " name2="预约" /></Flex.Item>
             <Flex.Item>
                   <PlaceHolder prop={this.props.prop}  url={clinic} name="诊所介绍"  name2="诊所介绍"/>
-                  <PlaceHolder prop={this.props.prop}   onClick={this.getMap.bind(this)}  url={location} name="诊所地址" name2="诊所地址" /> 
+                  <PlaceHolder prop={this.props.prop}   onClick={this.getPosition.bind(this)}  url={location} name="诊所地址" name2="诊所地址" /> 
             </Flex.Item>
           </Flex>
           <WhiteSpace style={{marginBottom:'5px'}}></WhiteSpace>
