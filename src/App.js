@@ -84,7 +84,7 @@ class App extends Component {
             <Route path="/clinicIntroduce" component={ClinicIntroduce} ></Route>
             <Route path="/serviceItems" component={ServiceItems} />
             <Route path="/doctorTeam" component={DoctorTeam} ></Route>
-            <Route path="/activity" component={Activity} ></Route>
+            <Route path="/activity" component={Activity} />
             <Route path="/bind" component={Bind} ></Route>
             {/* <PropectedRouter path="/my" component={My}></PropectedRouter> */}
             <Route component={Nofound}></Route>

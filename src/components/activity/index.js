@@ -5,6 +5,7 @@ import Detail from './detail/index'
 import {getClinicActivityList} from '../../api/api'
 import {Toast} from 'antd-mobile'
 import { Route } from "react-router-dom";
+import {GetRequest} from '../../util/index'
 
 
 
@@ -224,10 +225,15 @@ class Demo extends React.Component {
 class App extends React.Component {
     constructor(props) {
       super(props);
+
+      const param=GetRequest(this.props.location.search)
       this.state = {
         disabled: false,
         match: this.props.match.path,
         history: this.props.history
+      }
+      if(param.settingCode&&param.openId){
+        window.sessionStorage.setItem('paramInfo',JSON.stringify(param))
       }
       }
       render() {

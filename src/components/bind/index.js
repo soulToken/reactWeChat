@@ -116,7 +116,6 @@ class App extends React.Component{
           }
           //去注册
           gotoBind=()=>{
-              
             this.submit()
 
             

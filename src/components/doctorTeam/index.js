@@ -5,6 +5,7 @@ import { Route } from "react-router-dom";
 import { PullToRefresh, ListView, Button,Toast } from 'antd-mobile';
 import bannerUrl from '../../static/images/homepage_banner@3x.png';
 import Detail from './detail/index'
+import {GetRequest} from '../../util/index'
 import {getClinicDoctorList} from '../../api/api'
 import './index.css'
 
@@ -239,10 +240,14 @@ const Topic = ({ match }) => (
 class Iteme extends React.Component {
     constructor(props) {
       super(props);
+      const param=GetRequest(this.props.location.search)
       this.state = {
         disabled: false,
         match: this.props.match.path,
         history: this.props.history
+      }
+      if(param.settingCode&&param.openId){
+        window.sessionStorage.setItem('paramInfo',JSON.stringify(param))
       }
   
     }

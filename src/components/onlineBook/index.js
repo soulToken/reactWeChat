@@ -55,7 +55,7 @@ class BasicInputExample extends React.Component {
     // this.autoFocusInst.focus();
     this.canChooseTime();
     var timeDate=this.state.getDateArr(6);
-    var name=JSON.parse(sessionStorage.getItem('loginInfo')).name;
+    var name=JSON.parse(sessionStorage.getItem('loginInfo')).nickName;
     var phone=JSON.parse(sessionStorage.getItem('loginInfo')).mobile;
     this.setState({
       chooseDate:timeDate,

@@ -7,6 +7,7 @@ import navigation from '../../static/svg/clinic_introduction_navigation.svg'
 
 import { Toast } from 'antd-mobile';
 import {getClinicBaseinfo,getSignature4Js} from '../../api/api'
+import {GetRequest} from '../../util/index'
 //图片放大组件
 import Zmage from 'react-zmage'
 
@@ -14,6 +15,7 @@ import Zmage from 'react-zmage'
 class App extends React.Component{
     constructor(props) {
       super(props);
+      const param=GetRequest(this.props.location.search)
         this.state={
             getClinicBaseinfo:getClinicBaseinfo,
             getSignature4Js:getSignature4Js,
@@ -31,6 +33,9 @@ class App extends React.Component{
             lon:null,
             clinicName:null
         }
+        if(param.settingCode&&param.openId){
+            window.sessionStorage.setItem('paramInfo',JSON.stringify(param))
+          }
     }
   componentDidMount() {
       var self=this;
