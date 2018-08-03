@@ -15,6 +15,7 @@ import Zmage from 'react-zmage'
 class App extends React.Component{
     constructor(props) {
       super(props);
+      document.title="诊所介绍"
       const param=GetRequest(this.props.location.search)
         this.state={
             getClinicBaseinfo:getClinicBaseinfo,

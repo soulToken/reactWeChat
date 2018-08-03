@@ -225,7 +225,7 @@ class Demo extends React.Component {
 class App extends React.Component {
     constructor(props) {
       super(props);
-
+      document.title="诊所活动"
       const param=GetRequest(this.props.location.search)
       this.state = {
         disabled: false,

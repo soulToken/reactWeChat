@@ -12,6 +12,7 @@ class App extends React.Component{
             id:this.props.match.params.id,
             result:null,
         }
+        document.title="活动详情"
     }
     componentDidMount(){
         this.getDetail()

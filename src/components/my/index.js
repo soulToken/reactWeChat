@@ -89,6 +89,7 @@ class ListExample extends React.Component {
       getUserBaseinfo:getUserBaseinfo,
       modifyUserInfo:modifyUserInfo,
     }
+    document.title="个人中心"
   }
   componentDidMount(){
     console.log(minDate,new Date("1900-1-1"),this.state.time)

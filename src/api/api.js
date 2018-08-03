@@ -1,7 +1,7 @@
-const base="/api"
+// const base="/api"
 //生产环境
 // const base="http://192.168.0.25:84/"
-// const base="http://clinic.100care.cn"
+const base="http://clinic.100care.cn"
 // react 封装请求方法
 //1.诊所介绍
 export const getClinicBaseinfo = (param="",obj={}) => {

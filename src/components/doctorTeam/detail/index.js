@@ -11,6 +11,7 @@ import './index.css'
 class App extends React.Component{
     constructor(props) {
         super(props);
+        document.title="医生详情"
         this.state={
             doctorId:this.props.match.params.id,
             getClinicDoctorDetail:getClinicDoctorDetail,

@@ -3,6 +3,7 @@ import {Toast } from 'antd-mobile';
 import {getClinicServerIteamDetail} from '../../../api/api'
 class ImagePickerExample extends React.Component {
     constructor(props) {
+      document.title="服务详情"
         super(props);
           this.state = {
             getClinicServerIteamDetail:getClinicServerIteamDetail,

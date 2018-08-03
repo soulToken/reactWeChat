@@ -290,6 +290,7 @@ function genData(pIndex = 0) {
 class Iteme extends React.Component {
   constructor(props) {
     super(props);
+    document.title="服务列表"
     const param=GetRequest(this.props.location.search)
     this.state = {
       disabled: false,

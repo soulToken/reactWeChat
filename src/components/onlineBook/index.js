@@ -25,6 +25,7 @@ class BasicInputExample extends React.Component {
    
     constructor(props) {
       super(props);
+      document.title="预约"
       this.state = {
         en: false,
         show: false,

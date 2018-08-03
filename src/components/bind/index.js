@@ -21,6 +21,7 @@ class App extends React.Component{
                 verifyMobile:verifyMobile,
                 from:from
             }
+            document.title="绑定手机号"
             console.log(from,this)
           }
           
@@ -131,7 +132,7 @@ class App extends React.Component{
                        }
                   }>
                       <div className="bind_titleName">
-                                恒信口腔惠州分院
+                                绑定手机号
                       </div>
 
                         <div className="phone_box">

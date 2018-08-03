@@ -318,6 +318,7 @@ class TabExample extends React.Component {
     this.state = {
       index:null
     };
+    document.title="个人预约"
   }
   change=(el,index)=>{
      this.setState({

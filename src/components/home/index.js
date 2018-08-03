@@ -79,6 +79,7 @@ class FlexExample  extends React.Component {
       lat:null,
       lon:null,
     }
+    document.title="诊所主页"
     console.log(this.state.GetRequest(this.props.prop.location.search).settingCode)
   }
   componentDidMount(){

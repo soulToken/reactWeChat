@@ -42,6 +42,7 @@ function genData(pIndex = 0) {
 
 class App extends React.Component {
   constructor(props) {
+    document.title="医生团队"
     super(props);
     const dataSource = new ListView.DataSource({
       rowHasChanged: (row1, row2) => row1 !== row2,
@@ -146,7 +147,7 @@ class App extends React.Component {
             paddingRight:'12px',
             background:'rgba(255,255,255,1)',
             boxShadow:'0px 1px 3px 1px rgba(0,0,0,0.15)',
-            borderRadius:'14px'
+            // borderRadius:'14px'
           }}
         >
           <div style={{ display: '-webkit-box', display: 'flex', padding: '15px',flexDirection:'row' }}>
