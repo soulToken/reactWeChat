@@ -7,7 +7,7 @@ import { createForm } from 'rc-form';
 import './index.css'
 import success from '../../static/svg/online_booking_time_success.svg'
 import fail from '../../static/svg/online_booking_time_fail.svg' 
-import {getClinicAppointmentTimes,getClinicDoctorList,getClinicServerIteamList,subscriberAppointmentInfo} from '../../api/api'
+import {getClinicAppointmentTimes,getClinicDoctorList,getClinicServerIteamList,subscriberAppointmentInfo,getUserBaseinfo} from '../../api/api'
 import {getDateArr} from '../../util/index'
 import { Picker,Toast} from 'antd-mobile';
 
@@ -47,6 +47,7 @@ class BasicInputExample extends React.Component {
         getClinicDoctorList:getClinicDoctorList,
         getClinicServerIteamList:getClinicServerIteamList,
         subscriberAppointmentInfo:subscriberAppointmentInfo,
+        getUserBaseinfo:getUserBaseinfo,
         getDateArr:getDateArr,
       };
     }

@@ -1,13 +1,16 @@
-// const base="/api"
+const base="/api"
 //生产环境
 // const base="http://192.168.0.25:84/"
-const base="http://clinic.100care.cn"
+// const base="http://clinic.100care.cn"
 // react 封装请求方法
 //1.诊所介绍
 export const getClinicBaseinfo = (param="",obj={}) => {
-    obj={
-        "settingCode":"wxc_100000"
-    }
+    // obj={
+    //     "settingCode":"wxc_100000"
+    // }
+    
+     obj=JSON.parse(window.sessionStorage.getItem("paramInfo")) 
+     
     var headers=Object.assign( {
         "Content-Type": "application/x-www-form-urlencoded",
     },obj)  
@@ -24,9 +27,10 @@ export const getClinicBaseinfo = (param="",obj={}) => {
 }
 //2.医生信息列表
 export const getClinicDoctorList = (param="",obj={}) => {
-    obj={
-        "settingCode":"wxc_100000"
-    }
+    // obj={
+    //     "settingCode":"wxc_100000"
+    // }
+    obj=JSON.parse(window.sessionStorage.getItem("paramInfo")) 
     var headers=Object.assign( {
         "Content-Type": "application/x-www-form-urlencoded",
     },obj)  
@@ -43,9 +47,10 @@ export const getClinicDoctorList = (param="",obj={}) => {
 }
 //3.医生详情
 export const getClinicDoctorDetail = (param="",obj={}) => {
-    obj={
-        "settingCode":"wxc_100000"
-    }
+    // obj={
+    //     "settingCode":"wxc_100000"
+    // }
+    obj=JSON.parse(window.sessionStorage.getItem("paramInfo")) 
     var headers=Object.assign( {
         "Content-Type": "application/x-www-form-urlencoded",
     },obj)  
@@ -62,9 +67,7 @@ export const getClinicDoctorDetail = (param="",obj={}) => {
 }
 //4.服务列表
 export const getClinicServerIteamList = (param="",obj={}) => {
-    obj={
-        "settingCode":"wxc_100000"
-    }
+    obj=JSON.parse(window.sessionStorage.getItem("paramInfo")) 
     var headers=Object.assign( {
         "Content-Type": "application/x-www-form-urlencoded",
     },obj)  
@@ -81,9 +84,10 @@ export const getClinicServerIteamList = (param="",obj={}) => {
 }
 //5.服务详情
 export const getClinicServerIteamDetail = (param="",obj={}) => {
-    obj={
-        "settingCode":"wxc_100000"
-    }
+    // obj={
+    //     "settingCode":"wxc_100000"
+    // }
+    obj=JSON.parse(window.sessionStorage.getItem("paramInfo")) 
     var headers=Object.assign( {
         "Content-Type": "application/x-www-form-urlencoded",
     },obj)  
@@ -100,10 +104,11 @@ export const getClinicServerIteamDetail = (param="",obj={}) => {
 }
 //6.用户详情
 export const getUserBaseinfo = (param="",obj={}) => {
-    obj={
-        "settingCode":"wxc_100000",
-        "openId":"oWZnu0x_7kPOPDyiXWRjPIfzO8vQ"
-    }
+    // obj={
+    //     "settingCode":"wxc_100000",
+    //     "openId":"oWZnu0x_7kPOPDyiXWRjPIfzO8vQ"
+    // }
+    obj=JSON.parse(window.sessionStorage.getItem("paramInfo")) 
     var headers=Object.assign( {
         "Content-Type": "application/x-www-form-urlencoded",
         // "Content-Type": "application/json",
@@ -121,10 +126,11 @@ export const getUserBaseinfo = (param="",obj={}) => {
 }
 //7.修改用户信息
 export const modifyUserInfo = (param="",obj={}) => {
-    obj={
-        "settingCode":"wxc_100000",
-        "openId":"oWZnu0x_7kPOPDyiXWRjPIfzO8vQ"
-    }
+    // obj={
+    //     "settingCode":"wxc_100000",
+    //     "openId":"oWZnu0x_7kPOPDyiXWRjPIfzO8vQ"
+    // }
+    obj=JSON.parse(window.sessionStorage.getItem("paramInfo")) 
     var headers=Object.assign( {
         "Content-Type": "application/x-www-form-urlencoded",
         // "Content-Type": "application/json",
@@ -142,10 +148,11 @@ export const modifyUserInfo = (param="",obj={}) => {
 }
 //8 获取验证码接口
 export const getVerifyCode = (param="",obj={}) => {
-    obj={
-        "settingCode":"wxc_100000",
-        "openId":"oWZnu0x_7kPOPDyiXWRjPIfzO8vQ"
-    }
+    // obj={
+    //     "settingCode":"wxc_100000",
+    //     "openId":"oWZnu0x_7kPOPDyiXWRjPIfzO8vQ"
+    // }
+    obj=JSON.parse(window.sessionStorage.getItem("paramInfo")) 
     var headers=Object.assign( {
         "Content-Type": "application/x-www-form-urlencoded",
         // "Content-Type": "application/json",
@@ -163,10 +170,11 @@ export const getVerifyCode = (param="",obj={}) => {
 }
 //9 提交接口
 export const verifyMobile = (param="",obj={}) => {
-    obj={
-        "settingCode":"wxc_100000",
-        "openId":"oWZnu0x_7kPOPDyiXWRjPIfzO8vQ"
-    }
+    // obj={
+    //     "settingCode":"wxc_100000",
+    //     "openId":"oWZnu0x_7kPOPDyiXWRjPIfzO8vQ"
+    // }
+    obj=JSON.parse(window.sessionStorage.getItem("paramInfo")) 
     var headers=Object.assign( {
         "Content-Type": "application/x-www-form-urlencoded",
         // "Content-Type": "application/json",
@@ -184,10 +192,11 @@ export const verifyMobile = (param="",obj={}) => {
 }
 //10 查询每天可预约的时间段
 export const getClinicAppointmentTimes = (param="",obj={}) => {
-    obj={
-        "settingCode":"wxc_100000",
-        "openId":"oWZnu0x_7kPOPDyiXWRjPIfzO8vQ"
-    }
+    // obj={
+    //     "settingCode":"wxc_100000",
+    //     "openId":"oWZnu0x_7kPOPDyiXWRjPIfzO8vQ"
+    // }
+    obj=JSON.parse(window.sessionStorage.getItem("paramInfo")) 
     var headers=Object.assign( {
         "Content-Type": "application/x-www-form-urlencoded",
         // "Content-Type": "application/json",
@@ -205,10 +214,11 @@ export const getClinicAppointmentTimes = (param="",obj={}) => {
 }
 //11 预约按钮
 export const subscriberAppointmentInfo = (param="",obj={}) => {
-    obj={
-        "settingCode":"wxc_100000",
-        "openId":"oWZnu0x_7kPOPDyiXWRjPIfzO8vQ"
-    }
+    // obj={
+    //     "settingCode":"wxc_100000",
+    //     "openId":"oWZnu0x_7kPOPDyiXWRjPIfzO8vQ"
+    // }
+    obj=JSON.parse(window.sessionStorage.getItem("paramInfo")) 
     var headers=Object.assign( {
         "Content-Type": "application/x-www-form-urlencoded",
         // "Content-Type": "application/json",
@@ -226,10 +236,11 @@ export const subscriberAppointmentInfo = (param="",obj={}) => {
 }
 //12 wifi接口
 export const getClinicWIFI = (param="",obj={}) => {
-    obj={
-        "settingCode":"wxc_100000",
-        "openId":"oWZnu0x_7kPOPDyiXWRjPIfzO8vQ"
-    }
+    // obj={
+    //     "settingCode":"wxc_100000",
+    //     "openId":"oWZnu0x_7kPOPDyiXWRjPIfzO8vQ"
+    // }
+    obj=JSON.parse(window.sessionStorage.getItem("paramInfo")) 
     var headers=Object.assign( {
         "Content-Type": "application/x-www-form-urlencoded",
         // "Content-Type": "application/json",
@@ -247,10 +258,11 @@ export const getClinicWIFI = (param="",obj={}) => {
 }
 //13 活动列表
 export const getClinicActivityList = (param="",obj={}) => {
-    obj={
-        "settingCode":"wxc_100000",
-        "openId":"oWZnu0x_7kPOPDyiXWRjPIfzO8vQ"
-    }
+    // obj={
+    //     "settingCode":"wxc_100000",
+    //     "openId":"oWZnu0x_7kPOPDyiXWRjPIfzO8vQ"
+    // }
+    obj=JSON.parse(window.sessionStorage.getItem("paramInfo")) 
     var headers=Object.assign( {
         "Content-Type": "application/x-www-form-urlencoded",
         // "Content-Type": "application/json",
@@ -268,10 +280,11 @@ export const getClinicActivityList = (param="",obj={}) => {
 }
 //14 活动详情
 export const getClinicActivityDetail = (param="",obj={}) => {
-    obj={
-        "settingCode":"wxc_100000",
-        "openId":"oWZnu0x_7kPOPDyiXWRjPIfzO8vQ"
-    }
+    // obj={
+    //     "settingCode":"wxc_100000",
+    //     "openId":"oWZnu0x_7kPOPDyiXWRjPIfzO8vQ"
+    // }
+    obj=JSON.parse(window.sessionStorage.getItem("paramInfo")) 
     var headers=Object.assign( {
         "Content-Type": "application/x-www-form-urlencoded",
         // "Content-Type": "application/json",
@@ -289,10 +302,11 @@ export const getClinicActivityDetail = (param="",obj={}) => {
 }
 //15 就诊列表
 export const queryAppointmentList = (param="",obj={}) => {
-    obj={
-        "settingCode":"wxc_100000",
-        "openId":"oWZnu0x_7kPOPDyiXWRjPIfzO8vQ"
-    }
+    // obj={
+    //     "settingCode":"wxc_100000",
+    //     "openId":"oWZnu0x_7kPOPDyiXWRjPIfzO8vQ"
+    // }
+    obj=JSON.parse(window.sessionStorage.getItem("paramInfo")) 
     var headers=Object.assign( {
         "Content-Type": "application/x-www-form-urlencoded",
         // "Content-Type": "application/json",
@@ -310,10 +324,11 @@ export const queryAppointmentList = (param="",obj={}) => {
 }
 //16 取消预约
 export const modifyAppointmentStatus = (param="",obj={}) => {
-    obj={
-        "settingCode":"wxc_100000",
-        "openId":"oWZnu0x_7kPOPDyiXWRjPIfzO8vQ"
-    }
+    // obj={
+    //     "settingCode":"wxc_100000",
+    //     "openId":"oWZnu0x_7kPOPDyiXWRjPIfzO8vQ"
+    // }
+    obj=JSON.parse(window.sessionStorage.getItem("paramInfo")) 
     var headers=Object.assign( {
         "Content-Type": "application/x-www-form-urlencoded",
         // "Content-Type": "application/json",
@@ -331,10 +346,11 @@ export const modifyAppointmentStatus = (param="",obj={}) => {
 }
 //17 轮播图
 export const getClinicBanner = (param="",obj={}) => {
-    obj={
-        "settingCode":"wxc_100000",
-        "openId":"oWZnu0x_7kPOPDyiXWRjPIfzO8vQ"
-    }
+    // obj={
+    //     "settingCode":"wxc_100000",
+    //     "openId":"oWZnu0x_7kPOPDyiXWRjPIfzO8vQ"
+    // }
+    obj=JSON.parse(window.sessionStorage.getItem("paramInfo")) 
     var headers=Object.assign( {
         "Content-Type": "application/x-www-form-urlencoded",
         // "Content-Type": "application/json",
@@ -353,10 +369,11 @@ export const getClinicBanner = (param="",obj={}) => {
 
 //18 与微信授权
 export const getSignature4Js = (param="",obj={}) => {
-    obj={
-        "settingCode":"wxc_100000",
-        "openId":"oWZnu0x_7kPOPDyiXWRjPIfzO8vQ"
-    }
+    // obj={
+    //     "settingCode":"wxc_100000",
+    //     "openId":"oWZnu0x_7kPOPDyiXWRjPIfzO8vQ"
+    // }
+    obj=JSON.parse(window.sessionStorage.getItem("paramInfo")) 
     var headers=Object.assign( {
         "Content-Type": "application/x-www-form-urlencoded",
         // "Content-Type": "application/json",

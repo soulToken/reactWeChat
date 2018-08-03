@@ -79,8 +79,7 @@ class FlexExample  extends React.Component {
       lat:null,
       lon:null,
     }
-    
-    console.log(this.state.GetRequest(this.props.prop.location.search))
+    console.log(this.state.GetRequest(this.props.prop.location.search).settingCode)
   }
   componentDidMount(){
     // this.state.mock('',{settingCode:1010100010})
@@ -231,12 +230,13 @@ class FlexExample  extends React.Component {
   }
   //判断去绑定还是去 预约
   bindOrYuyue=()=>{
-    var loginInfo=JSON.parse(sessionStorage.getItem("loginInfo")) 
-        if(loginInfo&&loginInfo.mobile){
-          this.props.prop.history.push('/onlineBook')
-        }else{
-          this.props.prop.history.push('/bind')
-        }
+    // var loginInfo=JSON.parse(sessionStorage.getItem("loginInfo")) 
+    //     if(loginInfo&&loginInfo.mobile){
+    //       this.props.prop.history.push('/onlineBook')
+    //     }else{
+    //       this.props.prop.history.push('/bind')
+    //     }
+    this.props.prop.history.push('/onlineBook')
   }
   render(){
       return (

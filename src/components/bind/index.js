@@ -7,6 +7,10 @@ import {getVerifyCode,verifyMobile} from '../../api/api'
 class App extends React.Component{
         constructor(props) {
             super(props);
+            var from =null;
+            if(this.props.location&&this.props.location.state&&this.props.location.state.from){
+                from=this.props.location.state.from
+            }
             this.state = {
         　　　　tel: 13407163853,
         　　　　btnText: '获取验证码',
@@ -14,11 +18,12 @@ class App extends React.Component{
         　　　　discodeBtn: false,
         　　　　clearInterval: false,
                 getVerifyCode:getVerifyCode,
-                verifyMobile:verifyMobile
+                verifyMobile:verifyMobile,
+                from:from
             }
-         
+            console.log(from)
           }
-
+          
         //   componentWillReceiveProps(nextProps) {
         //     　　const { props } = this;
         //     　　const { openBox } = nextProps;
@@ -78,8 +83,12 @@ class App extends React.Component{
                 if (res.ok) {
                   res.json().then((obj)=> {
                       if(obj.resultCode==="1000"){ 
-                          
-                            self.props.history.push("/my")
+                            if(self.state.from){
+                                self.props.history.push("/onlineBook")
+                            }else{
+                                self.props.history.push("/my")
+                            }
+                           
                       }else{
                     
                           Toast.fail(obj.resultMsg, 1);
