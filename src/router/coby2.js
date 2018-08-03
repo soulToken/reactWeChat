@@ -24,6 +24,7 @@ import {Toast} from 'antd-mobile'
 class App extends React.Component {
     constructor(props) {
         super(props);
+        debugger;
         //在这里 做判断 如果 路径后面有参数  则  去请求 个人信息用户接口 并且 全局保存  诊所id 跟 openid
         const param=GetRequest(this.props.location.search)
         this.state={
@@ -33,6 +34,7 @@ class App extends React.Component {
         if(this.state.param.settingCode&&this.state.param.openId){
             window.sessionStorage.setItem('paramInfo',JSON.stringify(this.state.param))
         }
+        debugger;
      
     }  
        
@@ -68,8 +70,8 @@ class App extends React.Component {
                 return (
                     <div>
                        <Route 
-                       render={(props)=>
-                                    sessionStorage.getItem('loginInfo')&&JSON.parse(sessionStorage.getItem('loginInfo'))&&JSON.parse(sessionStorage.getItem('loginInfo')).mobile?<this.props.component prop={props}/>:
+                       render={()=>
+                                    sessionStorage.getItem('loginInfo')&&JSON.parse(sessionStorage.getItem('loginInfo'))&&JSON.parse(sessionStorage.getItem('loginInfo')).mobile?<this.props.component/>:
                                     <Redirect to={{
                                         pathname:"/bind",
                                         state:{from:this.props.location.pathname},

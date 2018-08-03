@@ -260,7 +260,7 @@ class BasicInputExample extends React.Component {
     this.setState({
       modal2:false
     })
-    this.props.history.replace("/")
+    this.props.prop.history.replace("/")
   }
   render() {
     const { getFieldProps } = this.props.form;

@@ -21,7 +21,7 @@ class App extends React.Component{
                 verifyMobile:verifyMobile,
                 from:from
             }
-            console.log(from)
+            console.log(from,this)
           }
           
         //   componentWillReceiveProps(nextProps) {

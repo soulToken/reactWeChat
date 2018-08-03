@@ -80,9 +80,9 @@ class App extends Component {
             <Route path="/login" component={Login}></Route>
             <PropectedRouter path="/my" component={My} ></PropectedRouter>
             <Route path="/detail" component={Detail} ></Route>
-            <PropectedRouter2 path="/onlineBook" component={OnlineBook} ></PropectedRouter2>
+            <PropectedRouter2 path="/onlineBook" component={OnlineBook} />
             <Route path="/clinicIntroduce" component={ClinicIntroduce} ></Route>
-            <Route path="/serviceItems" component={ServiceItems} ></Route>
+            <Route path="/serviceItems" component={ServiceItems} />
             <Route path="/doctorTeam" component={DoctorTeam} ></Route>
             <Route path="/activity" component={Activity} ></Route>
             <Route path="/bind" component={Bind} ></Route>
