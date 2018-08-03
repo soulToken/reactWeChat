@@ -28,16 +28,18 @@ class App extends React.Component {
         const param=GetRequest(this.props.location.search)
         this.state={
             param:param,
-            getUserBaseinfo:getUserBaseinfo
+            getUserBaseinfo:getUserBaseinfo,
+            show:false
         }
         if(this.state.param.settingCode&&this.state.param.openId){
             window.sessionStorage.setItem('paramInfo',JSON.stringify(this.state.param))
         }
+        this.getDetail()
      
     }  
        
     componentDidMount(){
-        this.getDetail()
+        // this.getDetail()
     }
     getDetail=()=>{
         var self=this;
@@ -49,8 +51,12 @@ class App extends React.Component {
           if (res.ok) {
             res.json().then((obj)=> {
                 if(obj.resultCode==="1000"){ 
+                    window.sessionStorage.setItem("loginInfo",JSON.stringify(obj.result))
                   Toast.hide()
-                      window.sessionStorage.setItem("loginInfo",JSON.stringify(obj.result))
+                  self.setState({
+                    show:true
+                  })
+                     
                 }else{
                     Toast.hide()
                     Toast.fail(obj.resultMsg, 1);
@@ -67,6 +73,11 @@ class App extends React.Component {
         render() {
                 return (
                     <div>
+
+                        
+                         {this.state.show&&
+      
+      
                        <Route 
                        render={(props)=>
                                     sessionStorage.getItem('loginInfo')&&JSON.parse(sessionStorage.getItem('loginInfo'))&&JSON.parse(sessionStorage.getItem('loginInfo')).mobile?<this.props.component prop={props}/>:
@@ -76,6 +87,7 @@ class App extends React.Component {
                                         goot:'1'
                                     }}></Redirect>
                             }   ></Route>
+                        }
                     </div>
                 )
         }

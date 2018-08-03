@@ -113,7 +113,7 @@ class App extends React.Component {
 
   onRefresh = () => {
     this.setState({ refreshing: true, isLoading: true });
-    this.genDataList(1,5,1)
+    this.genDataList(0,5,1)
   };
 
   onEndReached = (event) => {

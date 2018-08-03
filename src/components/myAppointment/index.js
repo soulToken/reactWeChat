@@ -312,39 +312,54 @@ class Fresher2 extends React.Component {
 
 
 
-
-
-const TabExample = () => (
-  <div>
-    <div style={{ position: 'absolute', width: '100%', bottom: '50px', top: '0', zIndex: '10', overflow: 'auto',background:'#f5f5f5' }}>
-      <WhiteSpace />
-      <StickyContainer>
-        <Tabs tabs={tabs}
-          initalPage={'t2'}
-          renderTabBar={renderTabBar}
-          // onTabClick={
-          //     (el,index)=>{
-          //         console.log(el,index)
-          //     }
-          // }
-          onChange={
-            (el, index) => {
-              console.log(el, index)
+class TabExample extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      index:null
+    };
+  }
+  change=(el,index)=>{
+     this.setState({
+       index:index
+     })
+  }
+  render(){
+    return(
+      <div>
+      <div style={{ position: 'absolute', width: '100%', bottom: '50px', top: '0', zIndex: '10', overflow: 'auto',background:'#f5f5f5' }}>
+        <WhiteSpace />
+        <StickyContainer>
+          <Tabs tabs={tabs}
+            initalPage={'t2'}
+            renderTabBar={renderTabBar}
+            // onTabClick={
+            //     (el,index)=>{
+            //         console.log(el,index)
+            //     }
+            // }
+            onChange={
+              
+             this.change.bind(this)
             }
+          >
+          <div > 
+              <Fresher2 ></Fresher2>
+          </div>
+            <div >
+            {this.state.index > 0 &&
+         <Fresher></Fresher>
           }
-        >
-        <div > 
-            <Fresher2 ></Fresher2>
-        </div>
-          <div >
-          <Fresher></Fresher>
-        </div>
-        
-        </Tabs>
-      </StickyContainer>
-      <WhiteSpace />
+           
+          </div>
+          
+          </Tabs>
+        </StickyContainer>
+        <WhiteSpace />
+      </div>
+      <TabBarExample></TabBarExample>
     </div>
-    <TabBarExample></TabBarExample>
-  </div>
-);
+    )
+  }
+}
 export default TabExample
